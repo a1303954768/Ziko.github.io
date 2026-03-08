@@ -3,46 +3,303 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的作品集</title>
+  <title>Ziko · 作品集</title>
   <style>
-    body {
-      font-family: sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: #f7f7f7;
+    /* 全局重置 - 复刻参考网站暗黑风格 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "SF Pro Display", "Inter", sans-serif;
     }
-    h1 {
-      color: #222;
-    }
-    .item {
-      background: white;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 0.5rem;
+    html, body {
+      height: 100%;
+      background-color: #121212;
+      color: #f5f5f5;
+      scroll-behavior: smooth;
     }
     a {
-      color: #0070f3;
       text-decoration: none;
+      color: inherit;
+    }
+    /* 容器 - 全屏适配 */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    /* 顶部导航 - 固定+极简 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .navbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #00ff9d; /* 参考网站的高亮绿 */
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-size: 1rem;
+      color: #aaa;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #00ff9d;
+    }
+    /* 英雄区 - 全屏沉浸式 */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-top: 80px; /* 避开导航栏 */
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .hero h1 span {
+      color: #00ff9d;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      max-width: 600px;
+    }
+    /* 作品区 */
+    .works {
+      padding: 8rem 0;
+    }
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 4rem;
+      text-align: center;
+      color: #fff;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 2.5rem;
+    }
+    /* 作品卡片 - 复刻悬浮动效 */
+    .work-card {
+      background-color: #1a1a1a;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .work-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 255, 157, 0.1);
+      border-color: rgba(0, 255, 157, 0.2);
+    }
+    .work-media {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
+    .work-video {
+      width: 100%;
+      height: 280px;
+      border: none;
+      background-color: #000;
+    }
+    .work-info {
+      padding: 1.8rem;
+    }
+    .work-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .work-desc {
+      font-size: 1rem;
+      color: #aaa;
+      line-height: 1.6;
+    }
+    /* 关于我 */
+    .about {
+      padding: 8rem 0;
+      background-color: #1a1a1a;
+      border-radius: 24px;
+      margin: 4rem 0;
+    }
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-img {
+      width: 100%;
+      border-radius: 16px;
+      height: 400px;
+      object-fit: cover;
+    }
+    .about-text h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #00ff9d;
+    }
+    .about-text p {
+      font-size: 1.1rem;
+      color: #aaa;
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    /* 联系方式 */
+    .contact {
+      padding: 8rem 0;
+      text-align: center;
+    }
+    .contact-info {
+      font-size: 1.2rem;
+      color: #aaa;
+      line-height: 2;
+      margin-top: 2rem;
+    }
+    .contact-info a {
+      color: #00ff9d;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    /* 页脚 */
+    .footer {
+      padding: 3rem 0;
+      text-align: center;
+      color: #666;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    /* 响应式 - 手机适配 */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .works-grid {
+        grid-template-columns: 1fr;
+      }
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        gap: 1.2rem;
+      }
+      .about-img {
+        height: 250px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="navbar-inner container">
+      <div class="logo">ZIKO · PORTFOLIO</div>
+      <div class="nav-links">
+        <a href="#home">首页</a>
+        <a href="#works">作品</a>
+        <a href="#about">关于</a>
+        <a href="#contact">联系</a>
+      </div>
+    </div>
+  </nav>
 
-  <h1>我的个人作品集</h1>
-  <p>这是我从零搭建的网站，外网可以访问。</p>
+  <!-- 英雄区 -->
+  <section class="hero container" id="home">
+    <h1>我是 <span>Ziko</span><br>专注于创意视觉创作</h1>
+    <p>用镜头和设计表达想法，打造有温度的视觉作品</p>
+  </section>
 
-  <div class="item">
-    <h3>作品 1</h3>
-    <p>作品描述</p>
-  </div>
+  <!-- 作品展示 -->
+  <section class="works container" id="works">
+    <h2 class="section-title">我的作品</h2>
+    <div class="works-grid">
+      <!-- 作品1：图片 -->
+      <div class="work-card">
+        <img src="https://picsum.photos/800/600?random=1" alt="作品封面" class="work-media">
+        <div class="work-info">
+          <h3 class="work-title">商业视觉设计</h3>
+          <p class="work-desc">为XX品牌打造的全套视觉体系，包含LOGO、海报、包装设计，使用工具：Figma + Photoshop</p>
+        </div>
+      </div>
 
-  <div class="item">
-    <h3>作品 2</h3>
-    <p>作品描述</p>
-  </div>
+      <!-- 作品2：视频 -->
+      <div class="work-card">
+        <!-- 替换为你的视频嵌入代码 -->
+        <iframe src="https://player.vimeo.com/video/76979871" class="work-video" title="作品视频"></iframe>
+        <div class="work-info">
+          <h3 class="work-title">品牌宣传短片</h3>
+          <p class="work-desc">1分30秒商业宣传视频，包含脚本创作、拍摄、剪辑，使用工具：Premiere Pro + After Effects</p>
+        </div>
+      </div>
 
-  <p>联系我：your@email.com</p>
+      <!-- 作品3：图片 -->
+      <div class="work-card">
+        <img src="https://picsum.photos/800/600?random=2" alt="作品封面" class="work-media">
+        <div class="work-info">
+          <h3 class="work-title">自然风光摄影</h3>
+          <p class="work-desc">XX地区风光摄影集，捕捉自然光影，使用设备：佳能5D4 + 24-70mm F2.8</p>
+        </div>
+      </div>
 
+      <!-- 作品4：视频 -->
+      <div class="work-card">
+        <iframe src="https://player.vimeo.com/video/76979871" class="work-video" title="作品视频"></iframe>
+        <div class="work-info">
+          <h3 class="work-title">短视频创意创作</h3>
+          <p class="work-desc">抖音平台创意短视频，单条播放量10W+，核心：剧情反转 + 视觉特效</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于我 -->
+  <section class="about container" id="about">
+    <div class="about-content">
+      <img src="https://picsum.photos/800/1000?random=10" alt="个人形象" class="about-img">
+      <div class="about-text">
+        <h3>关于我</h3>
+        <p>从业5年的视觉创作者，擅长视频剪辑、平面设计、商业摄影，服务过XX、XX等品牌。</p>
+        <p>我的创作理念：拒绝千篇一律，让每个作品都有独特的视觉语言和情感表达。</p>
+        <p>核心技能：视频剪辑(PR/AE)、平面设计(Figma/PS)、商业摄影、视觉创意策划。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系方式 -->
+  <section class="contact container" id="contact">
+    <h2 class="section-title">联系我</h2>
+    <div class="contact-info">
+      <p>邮箱：<a href="mailto:ziko@example.com">ziko@example.com</a></p>
+      <p>微信：ziko_creative</p>
+      <p>小红书：Ziko的视觉实验室</p>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer container">
+    <p>© 2026 Ziko 版权所有 | 所有作品均为原创</p>
+  </footer>
 </body>
 </html>
