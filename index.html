@@ -3,131 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黑色背景霓虹流动线条</title>
+    <title>大范围霓虹光流背景</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        /* 纯黑背景画布 - 铺满整个页面 */
-        #neon-bg {
+        /* 固定背景层，纯黑底色 */
+        #neon-flow-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: #000000; /* 纯黑背景 */
-            z-index: -1;          /* 放在所有内容下方 */
+            background: #000000;
+            z-index: -1;
         }
-        /* 你的网站内容容器（示例） */
-        .page-content {
+        /* 内容层，确保在背景上方 */
+        .content {
             position: relative;
-            z-index: 1;          /* 确保内容在霓虹背景上方 */
-            color: #fff;         /* 文字白色，对比黑色背景 */
-            padding: 60px;
-            font-size: 20px;
-            text-align: center;
+            z-index: 1;
+            color: #ffffff;
+            padding: 80px;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
-    <!-- 霓虹流动背景画布 -->
-    <canvas id="neon-bg"></canvas>
-
-    <!-- 你的网站内容 -->
-    <div class="page-content">
-        你的网站内容放在这里<br>
-        文字/图片/按钮等都不会被背景覆盖
+    <canvas id="neon-flow-bg"></canvas>
+    <div class="content">
+        <h1>Innovation and Growth</h1>
     </div>
 
-    <!-- 霓虹流动光效核心JS -->
     <script>
-        const canvas = document.getElementById('neon-bg');
+        const canvas = document.getElementById('neon-flow-bg');
         const ctx = canvas.getContext('2d');
 
-        // 适配窗口大小（响应式）
-        function resizeCanvas() {
+        // 自适应窗口大小
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', resize);
+        resize();
 
-        // 霓虹光效配置（可自定义）
+        // 核心配置（和你图里的质感匹配）
         const config = {
-            particles: 40,        // 光效节点数量（越多线条越密）
-            speed: 0.15,          // 流动速度（越小越慢，0.15是轻柔速度）
-            neonColor1: '#00f3ff',// 霓虹主色（青蓝色）
-            neonColor2: '#ff00e6',// 霓虹渐变色（粉紫色）
-            lineWidth: 1.5,       // 线条粗细
-            glowRadius: 8,        // 霓虹发光半径（越大光效越明显）
-            connectDistance: 120  // 节点连接距离（越大线条越多）
+            layers: 3,          // 光带层数（越多越丰富）
+            speed: 0.002,       // 流动速度（越小越慢，更柔和）
+            colors: [
+                '#00d8ff',      // 主霓虹蓝（和图里的青蓝一致）
+                '#6a00ff',      // 副霓虹紫
+                '#ff00cc'       // 点缀粉紫
+            ],
+            amplitude: 0.15,    // 波浪幅度（越大光带越宽）
+            frequency: 0.02,    // 波浪频率（越大波纹越密）
+            opacity: 0.3        // 光带透明度（越小越朦胧）
         };
 
-        // 生成霓虹节点
-        class NeonPoint {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                // 随机缓慢移动方向
-                this.vx = (Math.random() - 0.5) * config.speed;
-                this.vy = (Math.random() - 0.5) * config.speed;
-            }
-            // 更新节点位置（超出边界反弹）
-            update() {
-                if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-                if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
-                this.x += this.vx;
-                this.y += this.vy;
-            }
-        }
+        let time = 0;
 
-        // 创建节点数组
-        const points = Array.from({ length: config.particles }, () => new NeonPoint());
+        function draw() {
+            // 用半透明清空，制造拖影丝滑感
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 绘制霓虹线条和光效
-        function drawNeon() {
-            // 清空画布（保留轻微拖影，让流动更丝滑）
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 遍历所有节点，连接相邻节点生成霓虹线条
-            for (let i = 0; i < points.length; i++) {
-                const p1 = points[i];
-                p1.update();
+            for (let l = 0; l < config.layers; l++) {
+                const layerSpeed = config.speed * (l + 1) * 0.6;
+                const layerColor = config.colors[l % config.colors.length];
+                const layerAmp = config.amplitude * (1 - l * 0.2);
 
-                for (let j = i + 1; j < points.length; j++) {
-                    const p2 = points[j];
-                    // 计算节点间距离，只连接近距离节点
-                    const distance = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-                    if (distance < config.connectDistance) {
-                        // 创建霓虹渐变
-                        const gradient = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
-                        gradient.addColorStop(0, config.neonColor1);
-                        gradient.addColorStop(1, config.neonColor2);
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height / 2);
 
-                        // 绘制霓虹发光效果
-                        ctx.shadowColor = gradient;       // 发光颜色和线条渐变一致
-                        ctx.shadowBlur = config.glowRadius;// 发光模糊度
-                        
-                        // 绘制线条
-                        ctx.beginPath();
-                        ctx.strokeStyle = gradient;
-                        ctx.lineWidth = config.lineWidth;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-
-                        // 重置阴影，避免影响后续绘制
-                        ctx.shadowBlur = 0;
-                    }
+                for (let x = 0; x < canvas.width; x++) {
+                    const y = 
+                        canvas.height / 2 +
+                        Math.sin(x * config.frequency + time * layerSpeed) * 
+                        canvas.height * layerAmp * (l + 1) / config.layers;
+                    
+                    ctx.lineTo(x, y);
                 }
+
+                // 向下延伸到屏幕底部，形成光带区域
+                ctx.lineTo(canvas.width, canvas.height);
+                ctx.lineTo(0, canvas.height);
+                ctx.closePath();
+
+                // 渐变填充 + 发光效果
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, layerColor);
+                gradient.addColorStop(1, 'transparent');
+
+                ctx.fillStyle = gradient;
+                ctx.globalAlpha = config.opacity;
+                ctx.shadowColor = layerColor;
+                ctx.shadowBlur = 40; // 大范围弥散发光
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 1;
             }
-            requestAnimationFrame(drawNeon);
+
+            time += 1;
+            requestAnimationFrame(draw);
         }
 
-        // 启动霓虹流动效果
-        drawNeon();
+        draw();
     </script>
 </body>
 </html>
