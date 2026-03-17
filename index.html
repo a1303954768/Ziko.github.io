@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>赛博流光 | 个人作品集与博客</title>
+    <title>深渊流光 | 个人作品集与博客</title>
     <style>
         /* 基础重置与变量声明 */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #f0f0f0;
-            --text-muted: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.02); /* 降低卡片背景亮度配合暗色调 */
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
             --accent-color: #00e5ff;
         }
 
@@ -22,14 +22,14 @@
         }
 
         body {
-            background-color: #030305;
+            background-color: #010102; /* 更加深邃的纯黑色背景 */
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* 核心效果：朦胧弥散的霓虹光流背景 */
+        /* 核心效果：细长、暗淡的线性光流背景 */
         .ambient-canvas {
             position: fixed;
             top: 0;
@@ -38,52 +38,61 @@
             height: 100vh;
             z-index: -1;
             overflow: hidden;
-            background: #030305;
+            background: #010102;
         }
 
-        .neon-orb {
+        .neon-line {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(140px); /* 大范围模糊制造朦胧感 */
-            opacity: 0.7;
-            animation: flow 25s infinite alternate ease-in-out;
+            border-radius: 100%; /* 配合宽高形成两端渐隐的拉长椭圆 */
+            filter: blur(90px); /* 保持大范围的高斯模糊制造弥散感 */
             will-change: transform;
         }
 
-        .orb-1 {
-            width: 60vw;
-            height: 60vw;
-            background: #4a00e0; /* 深紫色 */
-            top: -20%;
-            left: -10%;
-            animation-duration: 28s;
+        /* 第一条光带：青色，从左上到右下 */
+        .line-1 {
+            width: 150vw;
+            height: 12vh;
+            background: #00e5ff;
+            top: 15%;
+            left: -25vw;
+            opacity: 0.18; /* 极低的透明度，降低亮度 */
+            animation: driftLine1 25s infinite alternate ease-in-out;
         }
 
-        .orb-2 {
-            width: 50vw;
-            height: 50vw;
-            background: #8e2de2; /* 亮紫色 */
-            bottom: -10%;
-            right: -10%;
-            animation-duration: 32s;
-            animation-direction: alternate-reverse;
+        /* 第二条光带：深紫色，作为背景暗调 */
+        .line-2 {
+            width: 200vw;
+            height: 18vh;
+            background: #6a0dad;
+            top: 55%;
+            left: -50vw;
+            opacity: 0.12; /* 更低的透明度，增加层次深邃感 */
+            animation: driftLine2 32s infinite alternate ease-in-out;
         }
 
-        .orb-3 {
-            width: 55vw;
-            height: 55vw;
-            background: #00e5ff; /* 霓虹青色 */
-            top: 30%;
-            left: 40%;
-            animation-duration: 35s;
-            mix-blend-mode: screen;
+        /* 第三条光带：幽蓝色，在底部交错 */
+        .line-3 {
+            width: 140vw;
+            height: 10vh;
+            background: #0044ff;
+            top: 75%;
+            left: -10vw;
+            opacity: 0.15;
+            animation: driftLine3 28s infinite alternate ease-in-out;
         }
 
-        @keyframes flow {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(5vw, 10vh) scale(1.1); }
-            66% { transform: translate(-10vw, 5vh) scale(0.9); }
-            100% { transform: translate(10vw, -10vh) scale(1.05); }
+        /* 设定每条光带特有的倾斜角度和平移轨迹 */
+        @keyframes driftLine1 {
+            0% { transform: rotate(-15deg) translate(-10vw, -5vh); }
+            100% { transform: rotate(-15deg) translate(10vw, 10vh); }
+        }
+        @keyframes driftLine2 {
+            0% { transform: rotate(-25deg) translate(5vw, 15vh); }
+            100% { transform: rotate(-25deg) translate(-15vw, -10vh); }
+        }
+        @keyframes driftLine3 {
+            0% { transform: rotate(-10deg) translate(-15vw, 5vh); }
+            100% { transform: rotate(-10deg) translate(15vw, -5vh); }
         }
 
         /* 页面布局与导航 */
@@ -91,6 +100,8 @@
             max-width: 1000px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         nav {
@@ -108,7 +119,7 @@
             letter-spacing: 2px;
             color: var(--text-main);
             text-decoration: none;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.3); /* 降低 Logo 的发光强度 */
         }
 
         .nav-links a {
@@ -116,6 +127,7 @@
             text-decoration: none;
             margin-left: 2rem;
             transition: color 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
@@ -125,54 +137,58 @@
         /* 玻璃拟物化卡片样式 */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 3rem;
             margin-bottom: 3rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); /* 加深阴影，融入暗色背景 */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         /* 头部介绍区域 */
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 5rem 2rem;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #fff, #00e5ff);
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
+            line-height: 1.8;
         }
 
         /* 徽章与标签 */
         .tag {
             display: inline-block;
-            padding: 0.4rem 1rem;
-            background: rgba(0, 229, 255, 0.1);
+            padding: 0.3rem 1rem;
+            background: rgba(0, 229, 255, 0.05);
             color: var(--accent-color);
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-right: 0.5rem;
             margin-bottom: 1rem;
-            border: 1px solid rgba(0, 229, 255, 0.2);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            letter-spacing: 1px;
         }
 
         /* 网格布局 */
@@ -183,18 +199,30 @@
         }
 
         .section-title {
-            font-size: 2rem;
+            font-size: 1.5rem;
             margin-bottom: 2rem;
             display: inline-block;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--accent-color);
+            margin-top: 8px;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
         }
 
         /* 文章列表样式 */
         .article-item {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            transition: opacity 0.3s ease;
         }
         
         .article-item:last-child {
@@ -202,48 +230,54 @@
             margin-bottom: 0;
             padding-bottom: 0;
         }
+        
+        .article-item:hover {
+            opacity: 0.8;
+        }
 
         .article-item h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #f5f5f5;
+            font-weight: 500;
         }
 
         .date {
-            font-size: 0.85rem;
-            color: var(--accent-color);
+            font-size: 0.8rem;
+            color: #666;
             margin-bottom: 1rem;
             display: block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         footer {
             text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            padding: 3rem 0;
+            color: #555;
+            font-size: 0.85rem;
             border-top: 1px solid var(--glass-border);
-            margin-top: 4rem;
+            margin-top: 5rem;
         }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; /* 移动端简略导航 */ }
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
             .glass-card { padding: 1.5rem; }
-            .orb-1, .orb-2, .orb-3 { width: 100vw; height: 100vw; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 背景光效容器 -->
+    <!-- 修改后的：线性、暗淡且缓慢移动的光效容器 -->
     <div class="ambient-canvas">
-        <div class="neon-orb orb-1"></div>
-        <div class="neon-orb orb-2"></div>
-        <div class="neon-orb orb-3"></div>
+        <div class="neon-line line-1"></div>
+        <div class="neon-line line-2"></div>
+        <div class="neon-line line-3"></div>
     </div>
 
-    <!-- 页面主要内容 -->
+    <!-- 页面主要内容 (无需修改结构) -->
     <div class="container">
         <nav>
             <a href="#" class="logo">NEON.PORTFOLIO</a>
@@ -254,54 +288,51 @@
             </div>
         </nav>
 
-        <!-- 头部介绍 -->
         <header class="glass-card hero" id="about">
             <h1>构建无界限的数字体验</h1>
             <p>你好，我是独立开发者与视觉设计师。我热衷于在代码与艺术的交界处探索，通过现代 Web 技术创造具有沉浸感的交互界面。</p>
-            <div style="margin-top: 2rem;">
+            <div style="margin-top: 2.5rem;">
                 <span class="tag">UI/UX 设计</span>
                 <span class="tag">全栈开发</span>
                 <span class="tag">创意编程</span>
             </div>
         </header>
 
-        <!-- 作品集区域 -->
         <h2 class="section-title" id="projects">精选作品</h2>
         <div class="grid">
             <div class="glass-card">
                 <span class="tag">2026 最新</span>
                 <h3 style="margin-bottom: 1rem;">星际跃迁引擎展示页</h3>
-                <p style="color: var(--text-muted);">使用 WebGL 和 Three.js 打造的沉浸式宇宙探索数据可视化面板，为用户提供实时的三维星图渲染。</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">使用 WebGL 和 Three.js 打造的沉浸式宇宙探索数据可视化面板，为用户提供实时的三维星图渲染与深空导航体验。</p>
             </div>
             <div class="glass-card">
                 <span class="tag">开源项目</span>
                 <h3 style="margin-bottom: 1rem;">极简主义任务管理系统</h3>
-                <p style="color: var(--text-muted);">基于 React 和 TailwindCSS 开发的生产力工具，支持本地离线存储，注重极致的交互响应速度。</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">基于 React 和 TailwindCSS 开发的生产力工具，支持本地离线存储，剔除一切冗余功能，注重极致的交互响应速度。</p>
             </div>
         </div>
 
-        <!-- 博客文章区域 -->
-        <h2 class="section-title" id="blog" style="margin-top: 2rem;">最近思考</h2>
+        <h2 class="section-title" id="blog" style="margin-top: 3rem;">最近思考</h2>
         <div class="glass-card">
             <div class="article-item">
+                <span class="date">MAR 15, 2026</span>
                 <h3>如何在 Web 端实现高性能的模糊光效？</h3>
-                <span class="date">2026年3月15日</span>
-                <p style="color: var(--text-muted);">探讨 `filter: blur()` 与 Canvas 渲染在性能上的差异，以及如何利用 GPU 加速来创建丝滑的赛博朋克光影弥散效果。</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">探讨 `filter: blur()` 与 Canvas 渲染在性能上的差异，以及如何利用 GPU 加速来创建丝滑的赛博朋克光影弥散效果。通过调整透明度与宽高比，实现类似深渊流光的视觉隐喻。</p>
             </div>
             <div class="article-item">
+                <span class="date">FEB 28, 2026</span>
                 <h3>设计系统：从混乱到秩序的必经之路</h3>
-                <span class="date">2026年2月28日</span>
-                <p style="color: var(--text-muted);">分享我在重构企业级后台时，如何提取设计令牌（Design Tokens）并建立一套高度可复用的前端组件库的经验。</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">分享我在重构企业级后台时，如何提取设计令牌（Design Tokens）并建立一套高度可复用的前端组件库的经验，以及在暗黑模式下的色彩科学。</p>
             </div>
             <div class="article-item">
+                <span class="date">JAN 10, 2026</span>
                 <h3>写给未来的自己：拥抱 AI 生成时代的创造力</h3>
-                <span class="date">2026年1月10日</span>
-                <p style="color: var(--text-muted);">当代码编写可以由大语言模型辅助完成时，人类开发者的核心竞争力将回归到审美、架构设计与对用户需求的深刻洞察上。</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">当代码编写可以由大语言模型辅助完成时，人类开发者的核心竞争力将回归到审美、架构设计与对用户需求的深刻洞察上。机器负责执行，而我们负责定义灵魂。</p>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 NEON.PORTFOLIO. All rights reserved. | Crafted with pure CSS & HTML.</p>
+            <p>© 2026 NEON.PORTFOLIO. All rights reserved. | Handcrafted with purely code.</p>
         </footer>
     </div>
 
