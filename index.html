@@ -44,40 +44,40 @@
         .neon-line {
             position: absolute;
             border-radius: 100%; /* 配合宽高形成两端渐隐的拉长椭圆 */
-            filter: blur(90px); /* 保持大范围的高斯模糊制造弥散感 */
+            filter: blur(100px); /* 略微增加模糊范围，让光带更宽广柔和 */
             will-change: transform;
         }
 
-        /* 第一条光带：青色，从左上到右下 */
+        /* 第一条光带：青色，从左上到右下 - 亮度增强 */
         .line-1 {
             width: 150vw;
             height: 12vh;
             background: #00e5ff;
             top: 15%;
             left: -25vw;
-            opacity: 0.18; /* 极低的透明度，降低亮度 */
+            opacity: 0.35; /* 增强亮度：从0.18提升到0.35 */
             animation: driftLine1 25s infinite alternate ease-in-out;
         }
 
-        /* 第二条光带：深紫色，作为背景暗调 */
+        /* 第二条光带：深紫色，作为背景暗调 - 亮度增强 */
         .line-2 {
             width: 200vw;
             height: 18vh;
             background: #6a0dad;
             top: 55%;
             left: -50vw;
-            opacity: 0.12; /* 更低的透明度，增加层次深邃感 */
+            opacity: 0.25; /* 增强亮度：从0.12提升到0.25 */
             animation: driftLine2 32s infinite alternate ease-in-out;
         }
 
-        /* 第三条光带：幽蓝色，在底部交错 */
+        /* 第三条光带：幽蓝色，在底部交错 - 亮度增强 */
         .line-3 {
             width: 140vw;
             height: 10vh;
             background: #0044ff;
             top: 75%;
             left: -10vw;
-            opacity: 0.15;
+            opacity: 0.30; /* 增强亮度：从0.15提升到0.30 */
             animation: driftLine3 28s infinite alternate ease-in-out;
         }
 
@@ -230,7 +230,7 @@
             margin-bottom: 0;
             padding-bottom: 0;
         }
-        
+
         .article-item:hover {
             opacity: 0.8;
         }
@@ -270,7 +270,7 @@
 </head>
 <body>
 
-    <!-- 修改后的：线性、暗淡且缓慢移动的光效容器 -->
+    <!-- 修改后的：线性、增强亮度且缓慢移动的光效容器 -->
     <div class="ambient-canvas">
         <div class="neon-line line-1"></div>
         <div class="neon-line line-2"></div>
