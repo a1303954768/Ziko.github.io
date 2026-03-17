@@ -3,113 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大范围霓虹光流背景</title>
+    <title>赛博流光 | 个人作品集与博客</title>
     <style>
+        /* 基础重置与变量声明 */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --accent-color: #00e5ff;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-        /* 固定背景层，纯黑底色 */
-        #neon-flow-bg {
+
+        body {
+            background-color: #030305;
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 核心效果：朦胧弥散的霓虹光流背景 */
+        .ambient-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: #000000;
             z-index: -1;
+            overflow: hidden;
+            background: #030305;
         }
-        /* 内容层，确保在背景上方 */
-        .content {
-            position: relative;
-            z-index: 1;
-            color: #ffffff;
-            padding: 80px;
-            font-size: 24px;
+
+        .neon-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px); /* 大范围模糊制造朦胧感 */
+            opacity: 0.7;
+            animation: flow 25s infinite alternate ease-in-out;
+            will-change: transform;
+        }
+
+        .orb-1 {
+            width: 60vw;
+            height: 60vw;
+            background: #4a00e0; /* 深紫色 */
+            top: -20%;
+            left: -10%;
+            animation-duration: 28s;
+        }
+
+        .orb-2 {
+            width: 50vw;
+            height: 50vw;
+            background: #8e2de2; /* 亮紫色 */
+            bottom: -10%;
+            right: -10%;
+            animation-duration: 32s;
+            animation-direction: alternate-reverse;
+        }
+
+        .orb-3 {
+            width: 55vw;
+            height: 55vw;
+            background: #00e5ff; /* 霓虹青色 */
+            top: 30%;
+            left: 40%;
+            animation-duration: 35s;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes flow {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5vw, 10vh) scale(1.1); }
+            66% { transform: translate(-10vw, 5vh) scale(0.9); }
+            100% { transform: translate(10vw, -10vh) scale(1.05); }
+        }
+
+        /* 页面布局与导航 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* 玻璃拟物化卡片样式 */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* 头部介绍区域 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 徽章与标签 */
+        .tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--accent-color);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        /* 网格布局 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* 文章列表样式 */
+        .article-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .article-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .article-item h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .date {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; /* 移动端简略导航 */ }
+            .glass-card { padding: 1.5rem; }
+            .orb-1, .orb-2, .orb-3 { width: 100vw; height: 100vw; }
         }
     </style>
 </head>
 <body>
-    <canvas id="neon-flow-bg"></canvas>
-    <div class="content">
-        <h1>Innovation and Growth</h1>
+
+    <!-- 背景光效容器 -->
+    <div class="ambient-canvas">
+        <div class="neon-orb orb-1"></div>
+        <div class="neon-orb orb-2"></div>
+        <div class="neon-orb orb-3"></div>
     </div>
 
-    <script>
-        const canvas = document.getElementById('neon-flow-bg');
-        const ctx = canvas.getContext('2d');
+    <!-- 页面主要内容 -->
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">NEON.PORTFOLIO</a>
+            <div class="nav-links">
+                <a href="#about">关于我</a>
+                <a href="#projects">精选作品</a>
+                <a href="#blog">博客文章</a>
+            </div>
+        </nav>
 
-        // 自适应窗口大小
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        <!-- 头部介绍 -->
+        <header class="glass-card hero" id="about">
+            <h1>构建无界限的数字体验</h1>
+            <p>你好，我是独立开发者与视觉设计师。我热衷于在代码与艺术的交界处探索，通过现代 Web 技术创造具有沉浸感的交互界面。</p>
+            <div style="margin-top: 2rem;">
+                <span class="tag">UI/UX 设计</span>
+                <span class="tag">全栈开发</span>
+                <span class="tag">创意编程</span>
+            </div>
+        </header>
 
-        // 核心配置（和你图里的质感匹配）
-        const config = {
-            layers: 3,          // 光带层数（越多越丰富）
-            speed: 0.002,       // 流动速度（越小越慢，更柔和）
-            colors: [
-                '#00d8ff',      // 主霓虹蓝（和图里的青蓝一致）
-                '#6a00ff',      // 副霓虹紫
-                '#ff00cc'       // 点缀粉紫
-            ],
-            amplitude: 0.15,    // 波浪幅度（越大光带越宽）
-            frequency: 0.02,    // 波浪频率（越大波纹越密）
-            opacity: 0.3        // 光带透明度（越小越朦胧）
-        };
+        <!-- 作品集区域 -->
+        <h2 class="section-title" id="projects">精选作品</h2>
+        <div class="grid">
+            <div class="glass-card">
+                <span class="tag">2026 最新</span>
+                <h3 style="margin-bottom: 1rem;">星际跃迁引擎展示页</h3>
+                <p style="color: var(--text-muted);">使用 WebGL 和 Three.js 打造的沉浸式宇宙探索数据可视化面板，为用户提供实时的三维星图渲染。</p>
+            </div>
+            <div class="glass-card">
+                <span class="tag">开源项目</span>
+                <h3 style="margin-bottom: 1rem;">极简主义任务管理系统</h3>
+                <p style="color: var(--text-muted);">基于 React 和 TailwindCSS 开发的生产力工具，支持本地离线存储，注重极致的交互响应速度。</p>
+            </div>
+        </div>
 
-        let time = 0;
+        <!-- 博客文章区域 -->
+        <h2 class="section-title" id="blog" style="margin-top: 2rem;">最近思考</h2>
+        <div class="glass-card">
+            <div class="article-item">
+                <h3>如何在 Web 端实现高性能的模糊光效？</h3>
+                <span class="date">2026年3月15日</span>
+                <p style="color: var(--text-muted);">探讨 `filter: blur()` 与 Canvas 渲染在性能上的差异，以及如何利用 GPU 加速来创建丝滑的赛博朋克光影弥散效果。</p>
+            </div>
+            <div class="article-item">
+                <h3>设计系统：从混乱到秩序的必经之路</h3>
+                <span class="date">2026年2月28日</span>
+                <p style="color: var(--text-muted);">分享我在重构企业级后台时，如何提取设计令牌（Design Tokens）并建立一套高度可复用的前端组件库的经验。</p>
+            </div>
+            <div class="article-item">
+                <h3>写给未来的自己：拥抱 AI 生成时代的创造力</h3>
+                <span class="date">2026年1月10日</span>
+                <p style="color: var(--text-muted);">当代码编写可以由大语言模型辅助完成时，人类开发者的核心竞争力将回归到审美、架构设计与对用户需求的深刻洞察上。</p>
+            </div>
+        </div>
 
-        function draw() {
-            // 用半透明清空，制造拖影丝滑感
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        <footer>
+            <p>© 2026 NEON.PORTFOLIO. All rights reserved. | Crafted with pure CSS & HTML.</p>
+        </footer>
+    </div>
 
-            for (let l = 0; l < config.layers; l++) {
-                const layerSpeed = config.speed * (l + 1) * 0.6;
-                const layerColor = config.colors[l % config.colors.length];
-                const layerAmp = config.amplitude * (1 - l * 0.2);
-
-                ctx.beginPath();
-                ctx.moveTo(0, canvas.height / 2);
-
-                for (let x = 0; x < canvas.width; x++) {
-                    const y = 
-                        canvas.height / 2 +
-                        Math.sin(x * config.frequency + time * layerSpeed) * 
-                        canvas.height * layerAmp * (l + 1) / config.layers;
-                    
-                    ctx.lineTo(x, y);
-                }
-
-                // 向下延伸到屏幕底部，形成光带区域
-                ctx.lineTo(canvas.width, canvas.height);
-                ctx.lineTo(0, canvas.height);
-                ctx.closePath();
-
-                // 渐变填充 + 发光效果
-                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                gradient.addColorStop(0, layerColor);
-                gradient.addColorStop(1, 'transparent');
-
-                ctx.fillStyle = gradient;
-                ctx.globalAlpha = config.opacity;
-                ctx.shadowColor = layerColor;
-                ctx.shadowBlur = 40; // 大范围弥散发光
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.globalAlpha = 1;
-            }
-
-            time += 1;
-            requestAnimationFrame(draw);
-        }
-
-        draw();
-    </script>
 </body>
 </html>
