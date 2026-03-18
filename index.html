@@ -33,8 +33,8 @@
             position: relative;
         }
 
-        /* --- 背景光流效果 (核心部分) --- */
-        .ambient-light {
+        /* --- 线性湍流背景效果 --- */
+        .turbulent-light {
             position: fixed;
             top: 0;
             left: 0;
@@ -45,48 +45,202 @@
             background: #000;
         }
 
-        /* 光球通用样式 - 减少虚化 */
-        .orb {
+        /* SVG 湍流滤镜 */
+        .turbulence-svg {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(40px); /* 从 80px 减少到 40px，清晰度提高 */
-            opacity: 0.7; /* 提高透明度 */
-            animation: float 10s infinite ease-in-out; /* 从 20s 加快到 10s */
-            mix-blend-mode: screen;
+            width: 0;
+            height: 0;
         }
 
-        /* 光球 1：蓝色 - 加快速度 */
-        .orb-1 {
-            top: -10%;
-            left: -10%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(0, 242, 255, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+        /* 线性光带容器 */
+        .light-streams {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            filter: url(#turbulence);
+            animation: turbulenceMove 15s infinite linear;
+        }
+
+        /* 单个光带 */
+        .stream {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 242, 255, 0) 10%, 
+                rgba(0, 242, 255, 0.8) 20%, 
+                rgba(188, 19, 254, 0.9) 50%, 
+                rgba(255, 0, 85, 0.8) 80%, 
+                rgba(0, 242, 255, 0) 90%, 
+                transparent 100%
+            );
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.6),
+                        0 0 40px rgba(188, 19, 254, 0.4),
+                        0 0 60px rgba(255, 0, 85, 0.3);
+            animation: streamFlow 3s infinite linear;
+        }
+
+        /* 不同位置和速度的光带 */
+        .stream:nth-child(1) {
+            top: 20%;
+            width: 60%;
             animation-delay: 0s;
-            animation-duration: 8s; /* 从 20s 加快到 8s */
+            animation-duration: 2.5s;
+            opacity: 0.8;
         }
 
-        /* 光球 2：紫色/粉色 - 加快速度 */
-        .orb-2 {
-            bottom: -20%;
-            right: -10%;
-            width: 70vw;
-            height: 70vw;
-            background: radial-gradient(circle, rgba(188, 19, 254, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
-            animation-delay: -3s;
-            animation-duration: 12s; /* 从 25s 加快到 12s */
+        .stream:nth-child(2) {
+            top: 35%;
+            width: 50%;
+            animation-delay: 0.5s;
+            animation-duration: 3s;
+            opacity: 0.7;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(188, 19, 254, 0) 10%, 
+                rgba(0, 242, 255, 0.9) 20%, 
+                rgba(255, 0, 85, 0.8) 50%, 
+                rgba(188, 19, 254, 0.9) 80%, 
+                rgba(0, 242, 255, 0) 90%, 
+                transparent 100%
+            );
         }
 
-        /* 光球 3：流动的光带感 - 加快速度 */
-        .orb-3 {
-            top: 40%;
-            left: 40%;
-            width: 50vw;
-            height: 30vw;
-            background: linear-gradient(90deg, rgba(255, 0, 85, 0.4), rgba(0, 242, 255, 0.4));
-            border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%;
-            animation: morph 8s infinite ease-in-out; /* 从 15s 加快到 8s */
+        .stream:nth-child(3) {
+            top: 50%;
+            width: 70%;
+            animation-delay: 1s;
+            animation-duration: 2.8s;
+            opacity: 0.9;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 0, 85, 0) 10%, 
+                rgba(0, 242, 255, 0.8) 20%, 
+                rgba(188, 19, 254, 0.9) 50%, 
+                rgba(0, 242, 255, 0.8) 80%, 
+                rgba(255, 0, 85, 0) 90%, 
+                transparent 100%
+            );
+        }
+
+        .stream:nth-child(4) {
+            top: 65%;
+            width: 55%;
+            animation-delay: 1.5s;
+            animation-duration: 3.2s;
             opacity: 0.6;
+        }
+
+        .stream:nth-child(5) {
+            top: 15%;
+            width: 45%;
+            animation-delay: 0.3s;
+            animation-duration: 2.6s;
+            opacity: 0.7;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 242, 255, 0) 10%, 
+                rgba(255, 0, 85, 0.9) 20%, 
+                rgba(188, 19, 254, 0.8) 50%, 
+                rgba(0, 242, 255, 0.9) 80%, 
+                rgba(255, 0, 85, 0) 90%, 
+                transparent 100%
+            );
+        }
+
+        .stream:nth-child(6) {
+            top: 80%;
+            width: 65%;
+            animation-delay: 2s;
+            animation-duration: 2.9s;
+            opacity: 0.8;
+            height: 3px;
+        }
+
+        .stream:nth-child(7) {
+            top: 42%;
+            width: 40%;
+            animation-delay: 0.8s;
+            animation-duration: 3.5s;
+            opacity: 0.65;
+        }
+
+        .stream:nth-child(8) {
+            top: 28%;
+            width: 50%;
+            animation-delay: 1.2s;
+            animation-duration: 2.7s;
+            opacity: 0.75;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(188, 19, 254, 0) 10%, 
+                rgba(255, 0, 85, 0.9) 20%, 
+                rgba(0, 242, 255, 0.8) 50%, 
+                rgba(188, 19, 254, 0.9) 80%, 
+                rgba(255, 0, 85, 0) 90%, 
+                transparent 100%
+            );
+        }
+
+        /* 流动动画 */
+        @keyframes streamFlow {
+            0% {
+                transform: translateX(-100%) skewY(-2deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(400%) skewY(2deg);
+                opacity: 0;
+            }
+        }
+
+        /* 湍流整体移动 */
+        @keyframes turbulenceMove {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            50% {
+                transform: translate(-2%, -2%) rotate(1deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+        }
+
+        /* 额外的光晕层 */
+        .glow-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                rgba(0, 242, 255, 0.15) 0%, 
+                rgba(188, 19, 254, 0.1) 30%, 
+                transparent 70%
+            );
+            animation: glowPulse 4s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
         }
 
         /* 噪点纹理层 */
@@ -101,30 +255,16 @@
             pointer-events: none;
         }
 
-        /* --- 动画定义 - 加快速度 --- */
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(50px, -80px) rotate(15deg); } /* 增加移动距离 */
-            66% { transform: translate(-30px, 40px) rotate(-10deg); } /* 增加移动距离 */
-            100% { transform: translate(0, 0) rotate(0deg); }
-        }
-
-        @keyframes morph {
-            0% { border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%; transform: translate(0, 0) scale(1); }
-            50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(-80px, -50px) scale(1.15); } /* 增加移动距离 */
-            100% { border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%; transform: translate(0, 0) scale(1); }
-        }
-
         /* --- 前景内容卡片 (玻璃拟态) --- */
         .content-card {
             position: relative;
             z-index: 10;
             text-align: center;
             padding: 4rem 6rem;
-            background: rgba(255, 255, 255, 0.05); /* 稍微提高透明度 */
-            backdrop-filter: blur(15px); /* 从 20px 减少到 15px */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.15); /* 提高边框透明度 */
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             max-width: 90%;
@@ -149,7 +289,7 @@
 
         .year-badge {
             display: inline-block;
-            border: 1px solid rgba(255,255,255,0.4); /* 提高边框可见度 */
+            border: 1px solid rgba(255,255,255,0.4);
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 0.7rem;
@@ -166,7 +306,7 @@
             background: linear-gradient(to right, #fff, #a5a5a5);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2); /* 稍微增强光晕 */
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
 
         /* 副标题 */
@@ -177,7 +317,7 @@
             margin-bottom: 2rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 0 25px rgba(0, 242, 255, 0.6); /* 增强霓虹效果 */
+            text-shadow: 0 0 25px rgba(0, 242, 255, 0.6);
         }
 
         /* 描述文本 */
@@ -193,14 +333,14 @@
         .btn {
             display: inline-block;
             padding: 12px 32px;
-            background: rgba(255, 255, 255, 0.15); /* 提高背景可见度 */
+            background: rgba(255, 255, 255, 0.15);
             color: #fff;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
             letter-spacing: 1px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3); /* 提高边框可见度 */
+            border: 1px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -235,7 +375,7 @@
             width: 1px;
             height: 60px;
             background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.6));
-            animation: pulseLine 1.5s infinite; /* 加快脉冲速度 */
+            animation: pulseLine 1.5s infinite;
         }
 
         @keyframes pulseLine {
@@ -247,17 +387,36 @@
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
             .content-card { padding: 3rem 2rem; width: 90%; }
-            .orb { filter: blur(35px); } /* 移动端也减少虚化 */
+            .stream { height: 2px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 背景层 -->
-    <div class="ambient-light" id="ambientLight">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+    <!-- SVG 湍流滤镜定义 -->
+    <svg class="turbulence-svg">
+        <defs>
+            <filter id="turbulence">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="turbulence" />
+                <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="30" xChannelSelector="R" yChannelSelector="G" />
+                <feGaussianBlur stdDeviation="2" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- 线性湍流背景层 -->
+    <div class="turbulent-light">
+        <div class="light-streams">
+            <div class="stream"></div>
+            <div class="stream"></div>
+            <div class="stream"></div>
+            <div class="stream"></div>
+            <div class="stream"></div>
+            <div class="stream"></div>
+            <div class="stream"></div>
+            <div class="stream"></div>
+        </div>
+        <div class="glow-overlay"></div>
     </div>
     
     <!-- 噪点层 -->
@@ -287,19 +446,21 @@
     <div class="footer-line"></div>
 
     <script>
-        // 鼠标视差效果
+        // 鼠标交互效果 - 影响湍流
         document.addEventListener('mousemove', (e) => {
-            const orbs = document.querySelectorAll('.orb');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
+            const streams = document.querySelectorAll('.stream');
+            const x = (e.clientX - window.innerWidth / 2) / 100;
+            const y = (e.clientY - window.innerHeight / 2) / 100;
 
-            orbs.forEach((orb, index) => {
-                const speed = (index + 1) * 15; // 稍微提高视差响应速度
-                const xOffset = (window.innerWidth / 2 - e.clientX) / speed;
-                const yOffset = (window.innerHeight / 2 - e.clientY) / speed;
-                
-                orb.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            streams.forEach((stream, index) => {
+                const speed = (index % 3 + 1) * 0.5;
+                const offsetX = x * speed;
+                const offsetY = y * speed;
+                stream.style.transform = `translateY(${offsetY}px) skewY(${offsetX}deg)`;
             });
+
+            const glowOverlay = document.querySelector('.glow-overlay');
+            glowOverlay.style.transform = `translate(${x * 2}px, ${y * 2}px) scale(1.05)`;
         });
     </script>
 </body>
