@@ -33,8 +33,8 @@
             position: relative;
         }
 
-        /* --- 粗大线性湍流背景效果 --- */
-        .turbulent-light {
+        /* --- 极光背景效果 --- */
+        .aurora-light {
             position: fixed;
             top: 0;
             left: 0;
@@ -45,150 +45,144 @@
             background: #000;
         }
 
-        /* SVG 湍流滤镜 */
-        .turbulence-svg {
+        /* 极光带 */
+        .aurora-band {
             position: absolute;
-            width: 0;
-            height: 0;
-        }
-
-        /* 线性光带容器 */
-        .light-streams {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        /* 单个粗大光带 */
-        .stream {
-            position: absolute;
-            height: 150px; /* 粗大的光带 */
-            width: 120%;
-            left: -10%;
+            width: 150%;
+            height: 300px;
             background: linear-gradient(90deg, 
                 transparent 0%, 
-                rgba(0, 242, 255, 0.3) 20%, 
-                rgba(0, 242, 255, 0.8) 40%, 
-                rgba(188, 19, 254, 0.9) 50%, 
-                rgba(255, 0, 85, 0.8) 60%, 
-                rgba(0, 242, 255, 0.3) 80%, 
+                rgba(0, 242, 255, 0.2) 20%, 
+                rgba(0, 242, 255, 0.6) 35%, 
+                rgba(188, 19, 254, 0.8) 50%, 
+                rgba(255, 0, 85, 0.6) 65%, 
+                rgba(0, 242, 255, 0.2) 80%, 
                 transparent 100%
             );
-            filter: blur(30px); /* 柔和模糊 */
-            box-shadow: 0 0 60px rgba(0, 242, 255, 0.5),
-                        0 0 100px rgba(188, 19, 254, 0.3),
-                        0 0 140px rgba(255, 0, 85, 0.2);
-            animation: streamFlow 20s infinite ease-in-out; /* 缓慢流动 */
-            opacity: 0.7;
-            border-radius: 100px; /* 圆角让边缘更柔和 */
+            filter: blur(60px);
+            border-radius: 200px;
+            opacity: 0;
+            animation: auroraFlow 25s infinite ease-in-out;
         }
 
-        /* 不同位置和速度的光带 */
-        .stream:nth-child(1) {
-            top: 15%;
+        /* 第一条极光 - 从左上到右下 */
+        .aurora-band:nth-child(1) {
+            top: -10%;
+            left: -50%;
+            transform: rotate(-15deg);
             animation-delay: 0s;
-            animation-duration: 18s;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(0, 242, 255, 0.4) 20%, 
-                rgba(188, 19, 254, 0.7) 50%, 
-                rgba(0, 242, 255, 0.4) 80%, 
-                transparent 100%
-            );
-        }
-
-        .stream:nth-child(2) {
-            top: 35%;
-            animation-delay: -5s;
-            animation-duration: 22s;
-            height: 180px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(188, 19, 254, 0.4) 20%, 
-                rgba(0, 242, 255, 0.8) 50%, 
-                rgba(255, 0, 85, 0.6) 80%, 
-                transparent 100%
-            );
-        }
-
-        .stream:nth-child(3) {
-            top: 55%;
-            animation-delay: -10s;
-            animation-duration: 20s;
-            height: 160px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 0, 85, 0.4) 20%, 
-                rgba(0, 242, 255, 0.7) 50%, 
-                rgba(188, 19, 254, 0.6) 80%, 
-                transparent 100%
-            );
-        }
-
-        .stream:nth-child(4) {
-            top: 75%;
-            animation-delay: -15s;
-            animation-duration: 24s;
-            height: 140px;
+            height: 350px;
             background: linear-gradient(90deg, 
                 transparent 0%, 
                 rgba(0, 242, 255, 0.3) 20%, 
-                rgba(255, 0, 85, 0.7) 50%, 
+                rgba(188, 19, 254, 0.7) 50%, 
                 rgba(0, 242, 255, 0.3) 80%, 
                 transparent 100%
             );
         }
 
-        /* 流动动画 - 缓慢波浪状移动 */
-        @keyframes streamFlow {
+        /* 第二条极光 - 从左下到右上 */
+        .aurora-band:nth-child(2) {
+            top: 60%;
+            left: -50%;
+            transform: rotate(10deg);
+            animation-delay: -12s;
+            height: 400px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 0, 85, 0.3) 20%, 
+                rgba(0, 242, 255, 0.7) 50%, 
+                rgba(188, 19, 254, 0.5) 80%, 
+                transparent 100%
+            );
+        }
+
+        /* 极光流动动画 */
+        @keyframes auroraFlow {
             0% {
-                transform: translateX(-5%) translateY(0) scaleX(1);
+                transform: translateX(0) translateY(0) rotate(-15deg) scaleX(1);
+                opacity: 0;
+            }
+            10% {
                 opacity: 0.6;
             }
             25% {
-                transform: translateX(5%) translateY(-20px) scaleX(1.05);
+                transform: translateX(20%) translateY(5%) rotate(-12deg) scaleX(1.1);
                 opacity: 0.8;
             }
             50% {
-                transform: translateX(10%) translateY(0) scaleX(1);
+                transform: translateX(40%) translateY(0) rotate(-10deg) scaleX(1);
                 opacity: 0.7;
             }
             75% {
-                transform: translateX(0%) translateY(20px) scaleX(0.95);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateX(-5%) translateY(0) scaleX(1);
+                transform: translateX(60%) translateY(-5%) rotate(-8deg) scaleX(0.95);
                 opacity: 0.6;
             }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateX(80%) translateY(0) rotate(-5deg) scaleX(0.9);
+                opacity: 0;
+            }
         }
 
-        /* 额外的光晕层 */
-        .glow-overlay {
+        /* 第二条极光的动画 */
+        .aurora-band:nth-child(2) {
+            animation: auroraFlow2 28s infinite ease-in-out;
+        }
+
+        @keyframes auroraFlow2 {
+            0% {
+                transform: translateX(0) translateY(0) rotate(10deg) scaleX(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateX(25%) translateY(-10%) rotate(12deg) scaleX(1.15);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateX(50%) translateY(0) rotate(15deg) scaleX(1);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translateX(70%) translateY(10%) rotate(18deg) scaleX(0.9);
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(90%) translateY(0) rotate(20deg) scaleX(0.85);
+                opacity: 0;
+            }
+        }
+
+        /* 环境光晕 */
+        .ambient-glow {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at center, 
+            background: radial-gradient(ellipse at 30% 50%, 
                 rgba(0, 242, 255, 0.15) 0%, 
-                rgba(188, 19, 254, 0.1) 30%, 
-                transparent 70%
+                transparent 50%
+            ),
+            radial-gradient(ellipse at 70% 60%, 
+                rgba(188, 19, 254, 0.12) 0%, 
+                transparent 50%
             );
-            animation: glowPulse 8s infinite ease-in-out;
-            pointer-events: none;
+            animation: ambientPulse 10s infinite ease-in-out;
         }
 
-        @keyframes glowPulse {
+        @keyframes ambientPulse {
             0%, 100% {
                 opacity: 0.5;
-                transform: scale(1);
             }
             50% {
                 opacity: 0.8;
-                transform: scale(1.05);
             }
         }
 
@@ -336,32 +330,17 @@
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
             .content-card { padding: 3rem 2rem; width: 90%; }
-            .stream { height: 100px; }
+            .aurora-band { height: 200px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SVG 湍流滤镜定义 -->
-    <svg class="turbulence-svg">
-        <defs>
-            <filter id="turbulence">
-                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="turbulence" />
-                <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="30" xChannelSelector="R" yChannelSelector="G" />
-                <feGaussianBlur stdDeviation="2" />
-            </filter>
-        </defs>
-    </svg>
-
-    <!-- 线性湍流背景层 -->
-    <div class="turbulent-light">
-        <div class="light-streams">
-            <div class="stream"></div>
-            <div class="stream"></div>
-            <div class="stream"></div>
-            <div class="stream"></div>
-        </div>
-        <div class="glow-overlay"></div>
+    <!-- 极光背景层 -->
+    <div class="aurora-light">
+        <div class="aurora-band"></div>
+        <div class="aurora-band"></div>
+        <div class="ambient-glow"></div>
     </div>
     
     <!-- 噪点层 -->
@@ -391,22 +370,19 @@
     <div class="footer-line"></div>
 
     <script>
-        // 鼠标交互效果 - 轻微影响光带
+        // 鼠标交互效果 - 轻微影响极光
         document.addEventListener('mousemove', (e) => {
-            const streams = document.querySelectorAll('.stream');
-            const x = (e.clientX - window.innerWidth / 2) / 200;
-            const y = (e.clientY - window.innerHeight / 2) / 200;
+            const auroraBands = document.querySelectorAll('.aurora-band');
+            const x = (e.clientX - window.innerWidth / 2) / 300;
+            const y = (e.clientY - window.innerHeight / 2) / 300;
 
-            streams.forEach((stream, index) => {
-                const speed = (index % 2 + 1) * 0.3;
-                const offsetX = x * speed;
-                const offsetY = y * speed;
-                stream.style.marginLeft = offsetX + 'px';
-                stream.style.marginTop = offsetY + 'px';
+            auroraBands.forEach((band, index) => {
+                const speed = (index + 1) * 0.2;
+                band.style.transform += ` translate(${x * speed}px, ${y * speed}px)`;
             });
 
-            const glowOverlay = document.querySelector('.glow-overlay');
-            glowOverlay.style.transform = `translate(${x * 2}px, ${y * 2}px) scale(1.05)`;
+            const ambientGlow = document.querySelector('.ambient-glow');
+            ambientGlow.style.transform = `translate(${x}px, ${y}px)`;
         });
     </script>
 </body>
