@@ -6,11 +6,14 @@
 <title>黄梓冠 Ziko | 视频创作者</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg-primary:#0a0a0a;--bg-secondary:#111111;--bg-card:rgba(26,26,26,0.6);--text-primary:#fff;--text-secondary:#a0a0a0;--accent:#6366f1;--accent-hover:#4f46e5;--gradient-1:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--gradient-2:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)}
+/* 将卡片背景透明度稍微调暗一点点（0.8），因为去掉了毛玻璃，需要保证文字清晰易读 */
+:root{--bg-primary:#0a0a0a;--bg-secondary:#111111;--bg-card:rgba(26,26,26,0.8);--text-primary:#fff;--text-secondary:#a0a0a0;--accent:#6366f1;--accent-hover:#4f46e5;--gradient-1:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--gradient-2:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.8;overflow-x:hidden}
 ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--bg-secondary)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:5px}
-nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);z-index:1000;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1);opacity:0;transform:translateY(-20px);animation:slideDown 0.8s ease forwards}
+
+/* 移除了 nav 和卡片的 backdrop-filter，保证纯净 */
+nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.95);z-index:1000;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1);opacity:0;transform:translateY(-20px);animation:slideDown 0.8s ease forwards}
 @keyframes slideDown{to{opacity:1;transform:translateY(0)}}
 .logo{font-size:1.8rem;font-weight:700;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .nav-links{display:flex;gap:30px}.nav-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:all 0.3s;position:relative}
@@ -23,7 +26,7 @@ nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.9
 .hero::after{content:'';position:absolute;bottom:-30%;right:-20%;width:100%;height:100%;background:radial-gradient(circle,rgba(240,147,251,0.1) 0%,transparent 60%);animation:pulse 10s ease-in-out infinite reverse}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.1);opacity:0.8}}
 .hero-container{position:relative;z-index:2;max-width:1400px;margin:0 auto;width:100%;display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center}
-.hero-content{opacity:0;transform:translateY(30px);animation:fadeInUp 1s ease 0.3s forwards;background:rgba(10,10,10,0.2);backdrop-filter:blur(10px);padding:40px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.hero-content{opacity:0;transform:translateY(30px);animation:fadeInUp 1s ease 0.3s forwards;background:rgba(10,10,10,0.2);padding:40px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
 .hero-subtitle{font-size:1.1rem;color:var(--accent);margin-bottom:10px;font-weight:600;letter-spacing:2px}
 .hero h1{font-size:clamp(2.5rem,5vw,4rem);margin-bottom:20px;line-height:1.2}
 .hero h1 span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -46,7 +49,9 @@ nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.9
 .section-title::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:60px;height:4px;background:var(--gradient-1);border-radius:2px}
 .skills{padding:120px 5%;background:transparent}
 .skills-container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px}
-.skill-card{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:24px;padding:40px;border:1px solid rgba(255,255,255,0.05);opacity:0;transform:translateY(50px);transition:all 0.6s}
+
+/* 移除了所有 backdrop-filter */
+.skill-card{background:var(--bg-card);border-radius:24px;padding:40px;border:1px solid rgba(255,255,255,0.05);opacity:0;transform:translateY(50px);transition:all 0.6s}
 .skill-card.visible{opacity:1;transform:translateY(0)}
 .skill-card:hover{border-color:rgba(99,102,241,0.3);box-shadow:0 20px 40px rgba(99,102,241,0.1)}
 .skill-card-label{font-size:0.9rem;color:var(--accent);margin-bottom:10px;font-weight:600;letter-spacing:1px}
@@ -69,7 +74,7 @@ nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.9
 .tools-description strong{color:var(--text-primary)}
 .experience{padding:100px 2% 40px;background:transparent;min-height:100vh}
 .experience-container{max-width:1800px;margin:0 auto;width:100%}
-.experience-card{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:24px;padding:40px;border:1px solid rgba(255,255,255,0.05);opacity:0;transform:translateY(50px);transition:all 0.6s}
+.experience-card{background:var(--bg-card);border-radius:24px;padding:40px;border:1px solid rgba(255,255,255,0.05);opacity:0;transform:translateY(50px);transition:all 0.6s}
 .experience-card.visible{opacity:1;transform:translateY(0)}
 .experience-text-section{height:40vh;margin-bottom:20px;position:relative;overflow:hidden;border:2px solid rgba(99,102,241,0.3);border-radius:16px}
 .experience-text-container{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
@@ -111,7 +116,7 @@ nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.9
 .play-button::after{content:'';width:0;height:0;border-left:28px solid #fff;border-top:18px solid transparent;border-bottom:18px solid transparent;margin-left:5px}
 .photo-gallery{display:none;max-width:1400px;margin:0 auto}
 .photo-gallery.active{display:block}
-.photo-scroll-container{height:800px;overflow-y:auto;overflow-x:hidden;padding:4px;border-radius:4px;background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.05)}
+.photo-scroll-container{height:800px;overflow-y:auto;overflow-x:hidden;padding:4px;border-radius:4px;background:var(--bg-card);border:1px solid rgba(255,255,255,0.05)}
 .photo-scroll-container::-webkit-scrollbar{width:8px}
 .photo-scroll-container::-webkit-scrollbar-track{background:var(--bg-secondary);border-radius:4px}
 .photo-scroll-container::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
@@ -141,7 +146,7 @@ nav{position:fixed;top:0;width:100%;padding:20px 5%;background:rgba(10,10,10,0.9
 .contact-gif{position:absolute;width:150px;height:150px;object-fit:cover;border-radius:12px;opacity:0.8;transition:all 0.3s;z-index:1}
 .contact-gif:hover{opacity:1;transform:scale(1.05)}
 .contact-gif-1{top:80px;left:15%}.contact-gif-2{top:80px;right:15%}.contact-gif-3{bottom:80px;left:10%}.contact-gif-4{bottom:80px;right:10%}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text-primary);padding:15px 30px;border-radius:12px;border:1px solid var(--accent);box-shadow:0 10px 40px rgba(0,0,0,0.5);z-index:9999;opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:10px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-card);color:var(--text-primary);padding:15px 30px;border-radius:12px;border:1px solid var(--accent);box-shadow:0 10px 40px rgba(0,0,0,0.5);z-index:9999;opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:10px}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 .toast-icon{font-size:1.2rem}.toast-text{font-size:1rem}.toast-text strong{color:var(--accent)}
 footer{padding:30px 5%;background:var(--bg-primary);text-align:center;color:var(--text-secondary);border-top:1px solid rgba(255,255,255,0.05)}
@@ -161,25 +166,30 @@ footer{padding:30px 5%;background:var(--bg-primary);text-align:center;color:var(
 .loader-circle{width:60px;height:60px;border:4px solid var(--bg-card);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===== 新增：若隐若现的不规则流体球体背景 ===== */
+/* ===== 核心修改：无缝平滑流体球体背景（无噪点、无断层） ===== */
 .aurora-light {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1; overflow: hidden; background: transparent; pointer-events: none;
 }
 .aurora-container {
-    position: absolute; width: 100%; height: 100%; mix-blend-mode: soft-light;
+    position: absolute; width: 100%; height: 100%; 
+    /* 使用 screen 混合模式，让颜色叠加更平滑，像发光体 */
+    mix-blend-mode: screen; 
 }
 .fluid-sphere {
-    position: absolute; border-radius: 50%; filter: blur(80px); will-change: transform, border-radius, opacity;
+    position: absolute; border-radius: 50%; 
+    /* 调整 blur 和 will-change 保证性能和平滑度 */
+    filter: blur(100px); will-change: transform, border-radius, opacity;
 }
 .sphere-1 {
     width: 90vw; height: 90vw; top: -10vw; left: -10vw;
-    background: radial-gradient(circle at center, rgba(0, 242, 255, 0.35) 0%, rgba(100, 200, 255, 0.1) 50%, transparent 70%);
+    /* 优化渐变节点，降低单次跨度，消除断层 */
+    background: radial-gradient(circle at center, rgba(66, 133, 244, 0.4) 0%, rgba(66, 133, 244, 0.15) 40%, transparent 75%);
     animation: fluidLoop1 50s ease-in-out infinite;
 }
 .sphere-2 {
     width: 100vw; height: 100vw; bottom: -15vw; right: -15vw;
-    background: radial-gradient(circle at center, rgba(188, 19, 254, 0.3) 0%, rgba(255, 0, 85, 0.08) 55%, transparent 75%);
+    background: radial-gradient(circle at center, rgba(156, 39, 176, 0.35) 0%, rgba(156, 39, 176, 0.1) 40%, transparent 75%);
     animation: fluidLoop2 65s ease-in-out infinite;
 }
 @keyframes fluidLoop1 {
@@ -194,12 +204,6 @@ footer{padding:30px 5%;background:var(--bg-primary);text-align:center;color:var(
     50% { transform: translate(-10vw, -15vh) rotate(-20deg) scale(0.95); border-radius: 40% 60% 40% 60% / 40% 60% 40% 60%; opacity: 1; }
     70% { border-radius: 60% 40% 60% 40% / 60% 40% 60% 40%; }
 }
-.noise-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    /* 修改：大大缩小噪点颗粒，使纹理更细腻 */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-    z-index: -1; pointer-events: none;
-}
 </style>
 </head>
 <body>
@@ -211,8 +215,6 @@ footer{padding:30px 5%;background:var(--bg-primary);text-align:center;color:var(
         <div class="fluid-sphere sphere-2"></div>
     </div>
 </div>
-<div class="noise-overlay"></div>
-
 <nav>
 <div class="logo">ZIKO.</div>
 <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
@@ -533,7 +535,7 @@ photoTrack.addEventListener('mouseleave',()=>{isPhotoHovered=false;startAutoScro
 photoTrack.addEventListener('wheel',(e)=>{e.preventDefault();photoScrollPosition+=e.deltaX||e.deltaY;const maxScroll=photoTrack.scrollWidth/2;if(photoScrollPosition>=maxScroll){photoScrollPosition=0}else if(photoScrollPosition<0){photoScrollPosition=maxScroll}photoTrack.style.transform=`translateX(-${photoScrollPosition}px)`},{passive:false});
 initPhotoCarousel();startAutoScroll();
 
-// ===== 新增：流光随鼠标视差互动特效 =====
+// ===== 流光随鼠标视差互动特效 =====
 document.addEventListener('mousemove', (e) => {
     requestAnimationFrame(() => {
         const auroraContainer = document.querySelector('.aurora-container');
