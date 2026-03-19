@@ -211,18 +211,37 @@ footer{padding:30px 5%;background:var(--bg-primary);text-align:center;color:var(
     100% { transform: translate(80vw, 80vh) scale(1); }
 }
 
+/* 动画 3：新增的品红色路径，增加不规则感 */
+@keyframes floatSpot3 {
+    0% { transform: translate(20vw, 90vh) scale(1.1); }
+    40% { transform: translate(90vw, 10vh) scale(0.7); }
+    70% { transform: translate(-10vw, 40vh) scale(1.2); }
+    100% { transform: translate(20vw, 90vh) scale(1.1); }
+}
+
 .spot-1 {
-    width: 40vw; /* 变小的球体 */
+    width: 40vw; 
     height: 40vw;
     background: radial-gradient(circle, rgba(13, 202, 240, 0.7) 0%, transparent 70%); /* 青色光斑 */
-    animation: floatSpot1 16s ease-in-out infinite; /* 16秒快速流动 */
+    /* 速度变为现在的 0.6 倍，时间变为：16 / 0.6 = 26.67s */
+    animation: floatSpot1 26.7s ease-in-out infinite; 
 }
 
 .spot-2 {
-    width: 45vw; /* 变小的球体 */
+    width: 45vw; 
     height: 45vw;
     background: radial-gradient(circle, rgba(100, 102, 241, 0.7) 0%, transparent 70%); /* 靛蓝光斑 */
-    animation: floatSpot2 20s ease-in-out infinite; /* 20秒快速流动 */
+    /* 速度变为现在的 0.6 倍，时间变为：20 / 0.6 = 33.33s */
+    animation: floatSpot2 33.3s ease-in-out infinite; 
+}
+
+/* ===== 新增：品红色球体 ===== */
+.spot-3 {
+    width: 38vw; 
+    height: 38vw;
+    background: radial-gradient(circle, rgba(255, 0, 255, 0.6) 0%, transparent 70%); /* 品红色光斑，稍微调低一点亮度平衡视觉 */
+    /* 同样采用较慢的速度，时间设为 30s 左右以区分其他两个球体路径 */
+    animation: floatSpot3 30s ease-in-out infinite;
 }
 
 </style>
@@ -233,7 +252,7 @@ footer{padding:30px 5%;background:var(--bg-primary);text-align:center;color:var(
 <div class="aurora-light">
     <div class="light-spot spot-1"></div>
     <div class="light-spot spot-2"></div>
-</div>
+    <div class="light-spot spot-3"></div> </div>
 <nav>
 <div class="logo">ZIKO.</div>
 <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
