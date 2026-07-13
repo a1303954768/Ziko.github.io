@@ -71,7 +71,6 @@
             will-change: width;
         }
 
-        /* 【新增】：预加载器打气文案 */
         .preloader-tip {
             font-size: 1rem;
             color: #888;
@@ -345,23 +344,68 @@
         .video-modal.active .video-modal-content { transform: scale(1); }
         .video-modal-content iframe { width: 100%; height: 100%; border: none; }
 
+        /* ==========================================================================
+           ★ 终极响应式适配：移动端降噪与折叠策略 (Max-width: 768px)
+           ========================================================================== */
         @media (max-width: 768px) {
-            .hero-profile { flex-direction: column-reverse; padding: 30px; gap: 30px; }
+            /* 1. 首屏 (Hero) 优化：垂直排列，缩小间距 */
+            .hero-profile { flex-direction: column-reverse; padding: 30px 20px; gap: 20px; }
             .profile-right { flex: 0 0 auto; width: 100%; aspect-ratio: 1/1; }
-            .profile-stats { flex-direction: column; gap: 20px; }
-            .card-footer { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .card-dual-footer { grid-template-columns: 1fr; gap: 20px; }
-            .stack-card { padding: 40px; height: auto; min-height: 80vh; }
-            .reviews-grid { flex-direction: column; padding: 20px; }
-            .review-wrapper { margin-left: 0; margin-top: -30px; width: 100%; flex: auto; }
-            .review-wrapper:first-child { margin-top: 0; }
-            .reviews-grid:has(.review-wrapper:hover) .review-wrapper:has(~ .review-wrapper:hover) .review-card { transform: scale(0.95); }
-            .review-wrapper:hover ~ .review-wrapper .review-card { transform: scale(0.95); }
-            .skills-layout { grid-template-columns: 1fr; }
+            .profile-title h1 { font-size: 2rem; min-height: auto; }
+            .profile-stats { flex-direction: row; flex-wrap: wrap; gap: 20px; }
+            .stat-item .number-wrap { font-size: 1.8rem; }
+
+            /* 2. 技能区 (Skills) 优化：单列，隐藏水印 */
+            .skills-layout { grid-template-columns: 1fr; gap: 30px; }
             .skills-left { position: static; }
+            .skills-title { font-size: 2.2rem; }
+            .skills-bg-text { display: none; /* 精简：隐藏超大水印文字，避免横向滚动和视觉拥挤 */ }
+            .skill-row { grid-template-columns: 35px 1fr; padding: 20px 10px; }
+            .skill-name { font-size: 1.3rem; flex-wrap: wrap; gap: 6px; }
+
+            /* 3. 经历卡片 (Reviews) 优化：取消错位旋转，垂直规矩排列 */
+            .reviews-header h2 { font-size: 2.2rem; }
+            .reviews-grid { flex-direction: column; padding: 20px 5vw; gap: 20px; }
+            .review-wrapper { margin-left: 0; margin-top: 0; width: 100%; flex: auto; }
+            /* 精简：取消移动端的错位与旋转，改为规矩的垂直列表，增强阅读性 */
+            .review-card { transform: none !important; min-height: auto; padding: 30px 20px; }
+            .reviews-grid:has(.review-wrapper:hover) .review-wrapper:has(~ .review-wrapper:hover) .review-card,
+            .review-wrapper:hover ~ .review-wrapper .review-card { transform: none !important; }
+
+            /* 3.5 散点照片与箭头 (Scatter Parallax) */
+            .scatter-char { font-size: 20vw; /* 缩小背景大字 */ }
+            .scatter-scroll-indicator { transform: scale(0.6) translateX(-50%); top: 25vh; }
+            .scatter-arrow-box { top: 30vh; }
+            .scatter-svg-line { height: 30vh; }
             .marquee-item { width: 300px; height: 200px; }
-            .scatter-svg-line { height: 40vh; }
-            .scatter-arrow-box { top: 40vh; transform: scale(0.8); }
+
+            /* 4. 视频作品堆叠 (Stacking Cards) 优化：大幅削减内边距，释放视频空间 */
+            .section-stacking { padding-bottom: 10vh; }
+            .stack-card { 
+                padding: 30px 20px; 
+                height: auto; 
+                min-height: 85vh; /* 保证充满屏幕，配合缩小后的文字恰好不被截断 */
+                border-radius: 24px;
+            }
+            .card-title { font-size: 1.8rem; white-space: normal; /* 允许标题换行 */ max-width: 100%; }
+            .card-header { margin-bottom: 15px; }
+            .card-desc { font-size: 1rem; }
+            .card-dual-footer { grid-template-columns: 1fr; gap: 20px; }
+            .dual-desc { font-size: 0.95rem; }
+            .tag-group { margin-top: 10px; gap: 6px; }
+            .tag-item { padding: 4px 12px; font-size: 0.8rem; }
+            .play-icon { width: 45px; height: 45px; }
+
+            /* 5. 联系我 (Contact) 优化：隐藏手势，通栏按钮 */
+            .hand-left, .hand-right { display: none; /* 精简：隐藏装饰性手势SVG，避免阻挡点击 */ }
+            .contact-title { font-size: 2.5rem; }
+            .contact-desc { font-size: 1rem; padding: 0 20px; }
+            .contact-actions { flex-direction: column; align-items: center; width: 100%; padding: 0 20px; }
+            .contact-btn { width: 100%; justify-content: center; font-size: 1.1rem; }
+
+            /* 弹窗全屏化 */
+            .video-modal-content { width: 100%; border-radius: 0; }
+            .video-modal-close { top: 15px; right: 15px; font-size: 40px; }
         }
     </style>
 </head>
@@ -374,7 +418,6 @@
             <div class="preloader-bar-container">
                 <div class="preloader-bar" id="preloader-bar"></div>
             </div>
-            <!-- 【新增】：预加载趣味文案 -->
             <div class="preloader-tip" id="preloader-tip">文件正在赶路，堵车请稍等片刻...</div>
         </div>
     </div>
