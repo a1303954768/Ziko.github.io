@@ -61,6 +61,7 @@
             background-color: rgba(0, 0, 0, 0.1); 
             border-radius: 2px;
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .preloader-bar {
@@ -68,6 +69,21 @@
             height: 100%;
             background-color: #111; 
             will-change: width;
+        }
+
+        /* 【新增】：预加载器打气文案 */
+        .preloader-tip {
+            font-size: 1rem;
+            color: #888;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-align: center;
+            animation: pulseText 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         /* Lenis 惯性滚动必需的基础 CSS */
@@ -91,7 +107,7 @@
             border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 32px; padding: 50px; 
             max-width: 1100px; 
             width: 90%; 
-            color: #F7F6F0; /* 优化：米黄色文字 */
+            color: #F7F6F0; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.4); 
             display: flex; gap: 50px; align-items: stretch; 
             transform: translateY(20px); opacity: 0; 
@@ -117,7 +133,6 @@
         .profile-right { flex: 0 0 350px; display: flex; }
         .hero-image-square {
             width: 100%; aspect-ratio: 1 / 1; border-radius: 24px;
-            /* 替换为本地人员照片 */
             background: url('images/person.jpg') center/cover;
             border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
@@ -177,6 +192,9 @@
         .skill-name { font-size: 1.6rem; font-weight: 700; color: #111; margin-bottom: 10px; display: flex; align-items: baseline; gap: 12px; }
         .skill-name span { font-size: 1.05rem; font-weight: 500; color: #888; }
         .skill-detail { font-size: 1.05rem; line-height: 1.7; color: #555; }
+        
+        .skill-link { color: #111; text-decoration: none; border-bottom: 1px solid #111; font-weight: 600; transition: color 0.3s, border-color 0.3s; }
+        .skill-link:hover { color: #4F35F1; border-color: #4F35F1; }
 
         /* ==========================================================================
            3. 动效三：学习与工作经历 (Page 3)
@@ -214,17 +232,9 @@
         .review-wrapper:nth-child(even) .author-info strong { color: #111; }
         .review-wrapper:nth-child(even) .author-info span { color: #888; }
 
-        .highlight-underline {
-            background-image: linear-gradient(180deg, transparent 65%, #F4C286 65%);
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            display: inline;
-            padding-bottom: 2px;
-            font-weight: 600;
-        }
+        .highlight-underline { background-image: linear-gradient(180deg, transparent 65%, #F4C286 65%); background-size: 100% 100%; background-repeat: no-repeat; display: inline; padding-bottom: 2px; font-weight: 600; }
         .review-wrapper:nth-child(odd) .highlight-underline { background-image: linear-gradient(180deg, transparent 65%, #FFB347 65%); color: #fff; }
 
-        /* 跑马灯 */
         .marquee-container { width: 100%; overflow: hidden; background-color: transparent; padding: 60px 0; margin-top: 20px; border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .marquee-track { display: flex; width: max-content; animation: scrollMarquee 90s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
@@ -240,17 +250,41 @@
         .scatter-char { position: absolute; font-size: clamp(12rem, 30vw, 40rem); font-weight: 900; color: rgba(0,0,0,0.03); line-height: 1; user-select: none; white-space: nowrap; will-change: transform; }
         .scatter-img-wrapper { position: absolute; will-change: transform; transform-style: preserve-3d; cursor: crosshair; }
         
-        /* 解除比例限制 */
         .scatter-inner { position: relative; width: 100%; height: auto; border-radius: 16px; transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1), box-shadow 0.5s ease; background: transparent; padding: 0; }
         .scatter-inner:hover { transform: scale(1.08) !important; z-index: 9999; }
         .scatter-inner img { width: 100%; height: auto; display: block; border-radius: 16px; }
 
+        /* 动态延长曲线指示器 */
+        .scatter-scroll-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 15; display: flex; justify-content: center; opacity: 0; transition: opacity 0.5s ease; }
+        .scatter-scroll-wrapper.active { opacity: 1; }
+        .scatter-svg-line { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 50vh; overflow: visible; }
+        .scatter-arrow-box { position: absolute; top: 50vh; left: 50%; width: 120px; margin-left: -60px; display: flex; flex-direction: column; align-items: center; animation: floatArrowBox 2.5s ease-in-out infinite; }
+        .scatter-scroll-text { font-size: 1.4rem; font-weight: 800; color: rgba(0,0,0,0.18); margin-top: 5px; letter-spacing: 0.15em; transform: rotate(-6deg); }
+        @keyframes floatArrowBox { 0%, 100% { transform: translateY(-5px); } 50% { transform: translateY(10px); } }
+
         /* ==========================================================================
            4. 动效四：滚动驱动三维卡片堆叠 (Page 4 - Stacking)
            ========================================================================== */
-        .section-stacking { padding-bottom: 20vh; }
+        .section-stacking { padding-bottom: 20vh; position: relative; }
+        .section-header { text-align: center; margin-bottom: 40px; padding-top: 60px; }
+        
         .stacking-container { width: 100%; height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; perspective: 1500px; }
-        .stack-card { position: absolute; width: 95vw; max-width: 1600px; height: 85vh; border-radius: 40px; padding: 80px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); will-change: transform; transform-origin: center center; }
+        
+        .stack-card { 
+            position: absolute; 
+            width: 95vw; 
+            max-width: 1600px; 
+            height: auto; 
+            min-height: 80vh; 
+            border-radius: 40px; 
+            padding: 50px 80px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); 
+            will-change: transform; 
+            transform-origin: center center; 
+        }
         
         .stack-card:nth-child(1) { background-color: #F4C286; color: #111; } 
         .stack-card:nth-child(2) { background-color: #DCE6EE; color: #111; } 
@@ -259,42 +293,32 @@
         .stack-card:nth-child(5) { background-color: #E6C8CB; color: #111; } 
         .stack-card:nth-child(6) { background-color: #EBE8E0; color: #1a1a1a; } 
         
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .card-title { font-size: clamp(3rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; max-width: 85%; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+        .card-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.05; max-width: 85%; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
         .card-footer { display: flex; justify-content: center; align-items: center; gap: 6vw; margin-top: auto; margin-bottom: auto; width: 100%; }
-        .card-desc-group { display: flex; flex-direction: column; gap: 15px; max-width: 480px; flex: 1; }
-        .card-desc { font-size: 1.4rem; line-height: 1.5; opacity: 0.9; }
+        .card-desc-group { display: flex; flex-direction: column; gap: 15px; max-width: 480px; flex: 1; margin-bottom: 20px; }
+        .card-desc { font-size: 1.25rem; line-height: 1.5; opacity: 0.9; }
         
-        /* 视频视觉容器 (点击放大播放版) */
         .card-visual { flex: 1.2; max-width: 680px; width: 100%; aspect-ratio: 16 / 9 !important; height: auto !important; background-color: rgba(128, 128, 128, 0.2); border-radius: 20px; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; }
-        .card-dual-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; width: 100%; margin-top: auto; margin-bottom: auto;}
+        
+        .card-dual-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; margin-top: auto; margin-bottom: auto; }
         .dual-column { display: flex; flex-direction: column; gap: 15px; }
         .dual-visual { width: 100%; aspect-ratio: 16 / 9 !important; height: auto !important; background-color: rgba(128, 128, 128, 0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; }
-        .dual-desc { font-size: 1.25rem; line-height: 1.5; opacity: 0.9; }
+        .dual-desc { font-size: 1.15rem; line-height: 1.5; opacity: 0.9; margin-bottom: 10px; }
 
-        /* 播放按钮悬浮层 */
-        .play-icon {
-            width: 60px; height: 60px; background: rgba(0, 0, 0, 0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(4px); transition: all 0.3s ease; color: #fff; z-index: 2;
-        }
+        .play-icon { width: 60px; height: 60px; background: rgba(0, 0, 0, 0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: all 0.3s ease; color: #fff; z-index: 2; }
         .card-visual:hover .play-icon, .dual-visual:hover .play-icon { transform: scale(1.1); background: rgba(255, 255, 255, 0.3); }
         .play-icon svg { width: 24px; height: 24px; margin-left: 4px; fill: currentColor; stroke: none; }
 
-        .tag-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
-        .tag-item { 
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 8px 20px; border-radius: 30px; 
-            background-color: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.15); 
-            font-size: 0.95rem; font-weight: 600; color: inherit; 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-        }
+        .tag-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+        .tag-item { display: inline-flex; align-items: center; justify-content: center; padding: 6px 16px; border-radius: 30px; background-color: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.15); font-size: 0.9rem; font-weight: 600; color: inherit; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .stack-card:nth-child(3) .tag-item { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); }
-        .shared-footer { grid-column: span 2; display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: -20px; }
+        .shared-footer { grid-column: span 2; display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 10px; }
         .shared-footer .dual-desc { max-width: 800px; }
 
         /* ==========================================================================
-           5. 动效五：尾页联系方式与握手 (Page 5 - Contact)
+           5. 动效五：尾页联系方式
            ========================================================================== */
         .section-contact { position: relative; width: 100%; height: 100vh; background-color: transparent; color: #111; display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 20; }
         .hand-left, .hand-right { position: absolute; top: 50%; margin-top: -100px; width: 200px; height: 200px; opacity: 0.15; z-index: 1; }
@@ -302,54 +326,32 @@
         .hand-right { left: 50%; }
         .contact-content { position: relative; z-index: 10; text-align: center; }
         .contact-title { font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; letter-spacing: -0.04em; margin-bottom: 20px; }
-        
         .contact-desc { font-size: 1.15rem; color: #666; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6; }
         .contact-hint { font-size: 0.95rem; color: #999; margin-bottom: 20px; letter-spacing: 0.05em; font-weight: 500; }
         .contact-actions { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-        
-        .contact-btn {
-            font-size: 1.25rem; font-weight: 600; color: #111; background: transparent;
-            border: 2px solid rgba(0,0,0,0.15); border-radius: 50px; padding: 15px 35px;
-            cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.3, 1); 
-            display: inline-flex; align-items: center; gap: 10px; font-family: inherit;
-        }
+        .contact-btn { font-size: 1.25rem; font-weight: 600; color: #111; background: transparent; border: 2px solid rgba(0,0,0,0.15); border-radius: 50px; padding: 15px 35px; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.3, 1); display: inline-flex; align-items: center; gap: 10px; font-family: inherit; }
         .contact-btn:hover { border-color: #111; background: #111; color: #F7F6F0; transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .contact-btn:active { transform: translateY(0); }
         .contact-btn.copied { background: #4F35F1; border-color: #4F35F1; color: #fff; transform: scale(0.95); }
 
         /* ==========================================================================
-           全屏视频弹窗播放器 (Video Modal)
+           全屏视频弹窗播放器
            ========================================================================== */
-        .video-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9); z-index: 9999999;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-        }
+        .video-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 9999999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
         .video-modal.active { opacity: 1; pointer-events: auto; }
-        .video-modal-close {
-            position: absolute; top: 30px; right: 40px;
-            color: #fff; font-size: 50px; cursor: pointer;
-            z-index: 2; line-height: 1; transition: transform 0.3s;
-        }
+        .video-modal-close { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 50px; cursor: pointer; z-index: 2; line-height: 1; transition: transform 0.3s; }
         .video-modal-close:hover { transform: scale(1.2); }
-        .video-modal-content {
-            width: 90%; max-width: 1200px; aspect-ratio: 16/9;
-            background: #000; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            transform: scale(0.95); transition: transform 0.4s ease;
-        }
+        .video-modal-content { width: 90%; max-width: 1200px; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.4s ease; }
         .video-modal.active .video-modal-content { transform: scale(1); }
         .video-modal-content iframe { width: 100%; height: 100%; border: none; }
 
-        /* 响应式调整 */
         @media (max-width: 768px) {
             .hero-profile { flex-direction: column-reverse; padding: 30px; gap: 30px; }
             .profile-right { flex: 0 0 auto; width: 100%; aspect-ratio: 1/1; }
             .profile-stats { flex-direction: column; gap: 20px; }
             .card-footer { flex-direction: column; align-items: flex-start; gap: 20px; }
             .card-dual-footer { grid-template-columns: 1fr; gap: 20px; }
-            .stack-card { padding: 40px; height: 80vh; }
+            .stack-card { padding: 40px; height: auto; min-height: 80vh; }
             .reviews-grid { flex-direction: column; padding: 20px; }
             .review-wrapper { margin-left: 0; margin-top: -30px; width: 100%; flex: auto; }
             .review-wrapper:first-child { margin-top: 0; }
@@ -358,6 +360,8 @@
             .skills-layout { grid-template-columns: 1fr; }
             .skills-left { position: static; }
             .marquee-item { width: 300px; height: 200px; }
+            .scatter-svg-line { height: 40vh; }
+            .scatter-arrow-box { top: 40vh; transform: scale(0.8); }
         }
     </style>
 </head>
@@ -370,12 +374,13 @@
             <div class="preloader-bar-container">
                 <div class="preloader-bar" id="preloader-bar"></div>
             </div>
+            <!-- 【新增】：预加载趣味文案 -->
+            <div class="preloader-tip" id="preloader-tip">文件正在赶路，堵车请稍等片刻...</div>
         </div>
     </div>
 
     <!-- 第一页：固定视频背景与个人简介 -->
     <div class="hero-fixed">
-        <!-- 视频背景 -->
         <video class="hero-video" src="images/bgvideo2.mp4" autoplay loop muted playsinline></video>
         <div class="hero-overlay"></div>
         <div class="hero-profile">
@@ -394,7 +399,6 @@
                 </div>
             </div>
             <div class="profile-right">
-                <!-- 人物头像 -->
                 <div class="hero-image-square"></div>
             </div>
         </div>
@@ -416,7 +420,6 @@
                         </p>
                     </div>
                     <div class="skills-video-container" id="video-container">
-                        <!-- 技能视频 -->
                         <video class="skill-video" src="images/技能球/剪辑技能球展示.mp4" muted loop playsinline></video>
                         <video class="skill-video" src="images/技能球/摄影技能球展示.mp4" muted loop playsinline></video>
                         <video class="skill-video" src="images/技能球/后期特效技能球展示.mp4" muted loop playsinline></video>
@@ -457,7 +460,9 @@
                             <div class="skill-num">04</div>
                             <div class="skill-info">
                                 <div class="skill-name">AI <span>Artificial Intelligence</span></div>
-                                <div class="skill-detail">熟练运用各类开源、闭源视频模型，替代掉部分传统后期繁杂冗余的步骤，例如将画面中不好看的地方去掉，将空旷单调的位置添加新物品，精细渲染三维白膜视频。</div>
+                                <div class="skill-detail">
+                                    运用视频Ai接替部分传统后期繁杂步骤，例如将画面中不好看的地方去掉，将空旷单调的位置添加新物品，精细渲染三维白膜视频。<br><br>通过Ai制作一些高效工具，优化自身工作流程，如：<a href="http://shotai.ziko1227.top/" target="_blank" class="skill-link">http://shotai.ziko1227.top/</a>（自动AI拉片复刻分镜的网站）。
+                                </div>
                             </div>
                         </div>
                         
@@ -519,7 +524,7 @@
 
             </div>
             
-            <!-- 跑马灯 (28张独立图片 + 28张拷贝以无缝循环) -->
+            <!-- 跑马灯 -->
             <div class="marquee-container">
                 <div class="marquee-track">
                     <div class="marquee-item"><img src="images/bts/bts01.jpg" alt="Work 1"></div>
@@ -597,106 +602,176 @@
                 <span class="scatter-char" style="top: 90%; right: 20%; transform: rotate(-15deg);">品</span>
             </div>
 
-            <!-- ★ 完美的 57 张深空物理引擎流：底层的图片赋予更高的 speed-y，确保必定能飞入视口，消灭一切留白 -->
-            
+            <!-- 固定全屏遮罩：随滚动延长的手绘风曲线和呼吸箭头 -->
+            <div class="scatter-scroll-wrapper" id="scatter-scroll-wrapper">
+                <svg class="scatter-svg-line" viewBox="0 0 100 500" preserveAspectRatio="none">
+                    <path id="magic-line" d="M 50 0 C 130 150, -30 300, 50 420 C 80 460, 50 500, 50 500" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="4" stroke-linecap="round" />
+                </svg>
+                <div class="scatter-arrow-box">
+                    <svg width="36" height="36" viewBox="0 0 40 40" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M 10 15 L 20 25 L 30 15" />
+                    </svg>
+                    <div class="scatter-scroll-text">往下滑</div>
+                </div>
+            </div>
+
+            <!-- ★ 终极修正：96 张深空重构阵列 (贯穿 5% 到 292%)，使用 SF-10 到 SF-57 保证绝无留白 -->
             <!-- Row 1 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-1.5" style="top: 5%; left: 3%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-1.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="-0.5" style="top: 15%; left: 26%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-2.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="0.5" style="top: 8%; right: 27%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-3.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.7" data-speed-x="1.5" style="top: 18%; right: 4%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-4.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-1" style="top: 5%; left: 3%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-10.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="1" style="top: 8%; left: 26%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-11.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-0.5" style="top: 2%; right: 27%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-12.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.7" data-speed-x="1.5" style="top: 12%; right: 4%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-13.jpg" alt="SF"></div></div>
 
             <!-- Row 2 -->
-            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="-1" style="top: 25%; left: 4%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-5.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-2" style="top: 35%; left: 28%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-6.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="1" style="top: 22%; right: 25%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-7.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 38%; right: 3%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-8.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="-2" style="top: 17%; left: 5%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-14.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="0.5" style="top: 22%; left: 28%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-15.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="-1" style="top: 15%; right: 26%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-16.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 25%; right: 3%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-17.jpg" alt="SF"></div></div>
 
             <!-- Row 3 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 45%; left: 2%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-9.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.7" data-speed-x="-1" style="top: 55%; left: 25%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-10.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="1.5" style="top: 42%; right: 28%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-11.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="0.5" style="top: 58%; right: 5%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-12.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 29%; left: 2%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-18.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.7" data-speed-x="-1" style="top: 35%; left: 25%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-19.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="1.5" style="top: 26%; right: 28%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-20.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="0.5" style="top: 38%; right: 5%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-21.jpg" alt="SF"></div></div>
 
             <!-- Row 4 -->
-            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="-1" style="top: 65%; left: 5%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-13.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-2" style="top: 75%; left: 27%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-14.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="2" style="top: 62%; right: 26%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-15.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="1" style="top: 78%; right: 2%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-16.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="-1" style="top: 41%; left: 5%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-22.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-2" style="top: 48%; left: 27%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-23.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="2" style="top: 39%; right: 26%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-24.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="1" style="top: 50%; right: 2%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-25.jpg" alt="SF"></div></div>
 
             <!-- Row 5 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-2" style="top: 85%; left: 3%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-17.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="-0.5" style="top: 95%; left: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-18.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="1.5" style="top: 82%; right: 25%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-19.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.7" data-speed-x="0.5" style="top: 98%; right: 4%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-20.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-2" style="top: 53%; left: 3%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-26.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="-0.5" style="top: 60%; left: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-27.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="1.5" style="top: 51%; right: 25%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-28.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.7" data-speed-x="0.5" style="top: 62%; right: 4%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-29.jpg" alt="SF"></div></div>
 
             <!-- Row 6 -->
-            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="-1" style="top: 105%; left: 4%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-21.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-2" style="top: 115%; left: 28%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-22.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="1" style="top: 102%; right: 28%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-23.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 118%; right: 3%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-24.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="-1" style="top: 65%; left: 4%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-30.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-2" style="top: 72%; left: 28%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-31.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.8" data-speed-x="1" style="top: 63%; right: 28%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-32.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 75%; right: 3%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-33.jpg" alt="SF"></div></div>
 
             <!-- Row 7 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 125%; left: 2%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-25.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="-1" style="top: 135%; left: 25%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-26.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="2" style="top: 122%; right: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-27.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="0.5" style="top: 138%; right: 5%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-28.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 77%; left: 2%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-34.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="-1" style="top: 85%; left: 25%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-35.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="2" style="top: 75%; right: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-36.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="0.9" data-speed-x="0.5" style="top: 88%; right: 5%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-37.jpg" alt="SF"></div></div>
 
-            <!-- Row 8 (提速开始，保证中后段绝对铺满) -->
-            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="-1" style="top: 145%; left: 5%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-29.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-2" style="top: 155%; left: 27%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-30.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="1.5" style="top: 142%; right: 27%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-31.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="3" style="top: 158%; right: 2%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-32.jpg" alt="SF"></div></div>
+            <!-- Row 8 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="-1" style="top: 89%; left: 5%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-38.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-2" style="top: 98%; left: 27%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-39.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="1.5" style="top: 87%; right: 27%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-40.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="3" style="top: 100%; right: 2%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-41.jpg" alt="SF"></div></div>
 
             <!-- Row 9 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-2" style="top: 165%; left: 7%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-33.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="-0.5" style="top: 175%; left: 31%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-34.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 162%; right: 26%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-35.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="1" style="top: 178%; right: 3%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-36.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-2" style="top: 101%; left: 7%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-42.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="-0.5" style="top: 110%; left: 31%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-43.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 98%; right: 26%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-44.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="1" style="top: 112%; right: 3%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-45.jpg" alt="SF"></div></div>
 
             <!-- Row 10 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1" style="top: 185%; left: 5%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-37.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-1.5" style="top: 195%; left: 28%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-38.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="1" style="top: 182%; right: 28%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-39.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 198%; right: 6%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-40.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1" style="top: 113%; left: 5%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-46.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-1.5" style="top: 122%; left: 28%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-47.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="1" style="top: 110%; right: 28%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-48.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 125%; right: 6%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-49.jpg" alt="SF"></div></div>
 
-            <!-- Row 11 (高速深空轨道区) -->
-            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-2" style="top: 205%; left: 4%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-41.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-1" style="top: 215%; left: 29%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-42.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="1.5" style="top: 202%; right: 25%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-43.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="0.5" style="top: 218%; right: 4%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-44.jpg" alt="SF"></div></div>
+            <!-- Row 11 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-2" style="top: 125%; left: 4%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-50.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-1" style="top: 135%; left: 29%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-51.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="1.5" style="top: 122%; right: 25%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-52.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="0.5" style="top: 138%; right: 4%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-53.jpg" alt="SF"></div></div>
 
             <!-- Row 12 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 225%; left: 6%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-45.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="-0.5" style="top: 235%; left: 27%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-46.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="2" style="top: 222%; right: 30%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-47.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="1" style="top: 238%; right: 5%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-48.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 137%; left: 6%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-54.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="-0.5" style="top: 147%; left: 27%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-55.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="2" style="top: 134%; right: 30%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-56.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="1" style="top: 150%; right: 5%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-57.jpg" alt="SF"></div></div>
+
+            <!-- ★★★ 第二次轮回，超高空深井区，提速滑出 ★★★ -->
 
             <!-- Row 13 -->
-            <div class="scatter-img-wrapper" data-speed-y="1.8" data-speed-x="-2" style="top: 245%; left: 3%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-49.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-1" style="top: 255%; left: 30%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-50.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="1.5" style="top: 242%; right: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-51.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="0.5" style="top: 258%; right: 7%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-52.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1" style="top: 149%; left: 3%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-10.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="1" style="top: 154%; left: 26%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-11.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-0.5" style="top: 145%; right: 27%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-12.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="1.5" style="top: 158%; right: 4%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-13.jpg" alt="SF"></div></div>
 
-            <!-- Row 14 (极限极速区) -->
-            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-1" style="top: 265%; left: 5%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-53.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.9" data-speed-x="-1.5" style="top: 275%; left: 28%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-54.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 262%; right: 28%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-55.jpg" alt="SF"></div></div>
-            <div class="scatter-img-wrapper" data-speed-y="1.8" data-speed-x="1" style="top: 278%; right: 4%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-56.jpg" alt="SF"></div></div>
+            <!-- Row 14 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-2" style="top: 161%; left: 5%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-14.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="0.5" style="top: 168%; left: 28%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-15.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="-1" style="top: 159%; right: 26%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-16.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="2" style="top: 171%; right: 3%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-17.jpg" alt="SF"></div></div>
 
-            <!-- Row 15 (最终收尾) -->
-            <div class="scatter-img-wrapper" data-speed-y="2.0" data-speed-x="-1" style="top: 290%; left: 38%; width: 25vw; min-width: 250px;"><div class="scatter-inner"><img src="images/SF/SF-57.jpg" alt="SF"></div></div>
+            <!-- Row 15 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-1.5" style="top: 173%; left: 2%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-18.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="-1" style="top: 180%; left: 25%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-19.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="1.5" style="top: 170%; right: 28%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-20.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="0.5" style="top: 184%; right: 5%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-21.jpg" alt="SF"></div></div>
+
+            <!-- Row 16 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="-1" style="top: 185%; left: 5%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-22.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="-2" style="top: 194%; left: 27%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-23.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="2" style="top: 183%; right: 26%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-24.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="1" style="top: 196%; right: 2%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-25.jpg" alt="SF"></div></div>
+
+            <!-- Row 17 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-2" style="top: 197%; left: 3%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-26.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="-0.5" style="top: 206%; left: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-27.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="1.5" style="top: 195%; right: 25%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-28.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.0" data-speed-x="0.5" style="top: 208%; right: 4%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-29.jpg" alt="SF"></div></div>
+
+            <!-- Row 18 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="-1" style="top: 209%; left: 4%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-30.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-2" style="top: 218%; left: 28%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-31.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.1" data-speed-x="1" style="top: 207%; right: 28%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-32.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="2" style="top: 220%; right: 3%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-33.jpg" alt="SF"></div></div>
+
+            <!-- Row 19 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-1.5" style="top: 221%; left: 2%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-34.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-1" style="top: 230%; left: 25%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-35.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 219%; right: 26%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-36.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.2" data-speed-x="0.5" style="top: 232%; right: 5%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-37.jpg" alt="SF"></div></div>
+
+            <!-- Row 20 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1" style="top: 233%; left: 5%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-38.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="-2" style="top: 242%; left: 27%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-39.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="1.5" style="top: 231%; right: 27%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-40.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="3" style="top: 244%; right: 2%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-41.jpg" alt="SF"></div></div>
+
+            <!-- Row 21 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-2" style="top: 245%; left: 7%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-42.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="-0.5" style="top: 254%; left: 31%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-43.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="2" style="top: 243%; right: 26%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-44.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="1" style="top: 256%; right: 3%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-45.jpg" alt="SF"></div></div>
+
+            <!-- Row 22 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-1" style="top: 257%; left: 5%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-46.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="-1.5" style="top: 266%; left: 28%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-47.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.3" data-speed-x="1" style="top: 255%; right: 28%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-48.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="2" style="top: 268%; right: 6%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-49.jpg" alt="SF"></div></div>
+
+            <!-- Row 23 -->
+            <div class="scatter-img-wrapper" data-speed-y="1.8" data-speed-x="-2" style="top: 269%; left: 4%; width: 18vw; min-width: 180px;"><div class="scatter-inner"><img src="images/SF/SF-50.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="-1" style="top: 278%; left: 29%; width: 23vw; min-width: 230px;"><div class="scatter-inner"><img src="images/SF/SF-51.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.7" data-speed-x="1.5" style="top: 267%; right: 25%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-52.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.4" data-speed-x="0.5" style="top: 280%; right: 4%; width: 22vw; min-width: 220px;"><div class="scatter-inner"><img src="images/SF/SF-53.jpg" alt="SF"></div></div>
+
+            <!-- Row 24 (完美填平到底部的最后一波强力抛射) -->
+            <div class="scatter-img-wrapper" data-speed-y="1.6" data-speed-x="-1.5" style="top: 281%; left: 6%; width: 21vw; min-width: 210px;"><div class="scatter-inner"><img src="images/SF/SF-54.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.9" data-speed-x="-0.5" style="top: 290%; left: 27%; width: 19vw; min-width: 190px;"><div class="scatter-inner"><img src="images/SF/SF-55.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.5" data-speed-x="2" style="top: 279%; right: 30%; width: 24vw; min-width: 240px;"><div class="scatter-inner"><img src="images/SF/SF-56.jpg" alt="SF"></div></div>
+            <div class="scatter-img-wrapper" data-speed-y="1.8" data-speed-x="1" style="top: 292%; right: 5%; width: 20vw; min-width: 200px;"><div class="scatter-inner"><img src="images/SF/SF-57.jpg" alt="SF"></div></div>
 
         </section>
 
-        <!-- 第四页：滚动驱动三维卡片堆叠 (Page 4) -->
+        <!-- 第四页：滚动驱动三维卡片堆叠 -->
         <section class="section-stacking" id="stack-section">
-            <div class="section-header" style="text-align: center; margin-bottom: 60px;">
+            <div class="section-header" style="text-align: center; margin-bottom: 40px; padding-top: 60px;">
                 <h2 style="font-size: clamp(3rem, 6vw, 4.5rem); color: #111; font-weight: 800; letter-spacing: -0.03em;">视频作品</h2>
             </div>
             
-            <div class="stacking-container">
+            <div class="stacking-container" id="stacking-container">
                 
-                <!-- 卡片一 -->
                 <div class="stack-card">
                     <div class="card-header"><h2 class="card-title">记录潮汕——年</h2><span>(01)</span></div>
                     <div class="card-footer">
@@ -715,7 +790,6 @@
                     </div>
                 </div>
 
-                <!-- 卡片二 -->
                 <div class="stack-card">
                     <div class="card-header"><h2 class="card-title">微纪实 & 微电影</h2><span>(02)</span></div>
                     <div class="card-dual-footer">
@@ -742,7 +816,6 @@
                     </div>
                 </div>
 
-                <!-- 卡片三 -->
                 <div class="stack-card">
                     <div class="card-header"><h2 class="card-title">小红书公益—上海站</h2><span>(03)</span></div>
                     <div class="card-footer">
@@ -758,7 +831,6 @@
                     </div>
                 </div>
 
-                <!-- 卡片四 -->
                 <div class="stack-card">
                     <div class="card-header"><h2 class="card-title">商业混剪与访谈包装</h2><span>(04)</span></div>
                     <div class="card-dual-footer">
@@ -785,7 +857,6 @@
                     </div>
                 </div>
                 
-                <!-- 卡片五 -->
                 <div class="stack-card">
                     <div class="card-header"><h2 class="card-title">电商主图视频 (一)</h2><span>(05)</span></div>
                     <div class="card-dual-footer">
@@ -811,7 +882,6 @@
                     </div>
                 </div>
 
-                <!-- 卡片六 -->
                 <div class="stack-card">
                     <div class="card-header"><h2 class="card-title">电商主图视频 (二)</h2><span>(06)</span></div>
                     <div class="card-dual-footer">
@@ -840,31 +910,21 @@
             </div>
         </section>
 
-        <!-- 第五页：联系方式与握手 (Page 5) -->
+        <!-- 第五页：联系方式 -->
         <section class="section-contact" id="contact-section">
             <div class="hand-left">
-                <!-- 预留的 SVG 线条图，如果你有了透明图片，可以在此处将 svg 替换为 img 标签 -->
-                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" stroke="#111" stroke-width="24" stroke-linecap="round">
-                    <path d="M-100,120 L120,120 A 40,40 0 0,0 160,80 L160,50" />
-                </svg>
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" stroke="#111" stroke-width="24" stroke-linecap="round"><path d="M-100,120 L120,120 A 40,40 0 0,0 160,80 L160,50" /></svg>
             </div>
             <div class="hand-right">
-                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" stroke="#111" stroke-width="24" stroke-linecap="round">
-                    <path d="M300,80 L80,80 A 40,40 0 0,0 40,120 L40,150" />
-                </svg>
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" stroke="#111" stroke-width="24" stroke-linecap="round"><path d="M300,80 L80,80 A 40,40 0 0,0 40,120 L40,150" /></svg>
             </div>
             <div class="contact-content">
                 <h2 class="contact-title">联系我</h2>
                 <p class="contact-desc">感谢您在百忙之中浏览完我的作品，如果觉得我项目经历合适，可以通过以下方式和我联系。</p>
-                
                 <p class="contact-hint">点击可直接复制 ↓</p>
                 <div class="contact-actions">
-                    <button class="contact-btn" data-copy="1691679113@qq.com">
-                        <span>1691679113@qq.com</span>
-                    </button>
-                    <button class="contact-btn" data-copy="13129566521">
-                        <span>13129566521</span>
-                    </button>
+                    <button class="contact-btn" data-copy="1691679113@qq.com"><span>1691679113@qq.com</span></button>
+                    <button class="contact-btn" data-copy="ziko1227"><span>微信: ziko1227</span></button>
                 </div>
             </div>
         </section>
@@ -874,12 +934,10 @@
     <!-- 全局独立视频弹窗容器 -->
     <div class="video-modal" id="video-modal">
         <div class="video-modal-close" id="video-close">&times;</div>
-        <div class="video-modal-content" id="video-content">
-            <!-- iframe 将由 JS 动态注入 -->
-        </div>
+        <div class="video-modal-content" id="video-content"></div>
     </div>
 
-    <!-- 核心动画与滚动插件 -->
+    <!-- 核心动画插件 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
@@ -888,19 +946,28 @@
     <script>
         gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
-        // ==========================================================================
-        // 预加载器与首屏打字机入场序列
-        // ==========================================================================
+        // 1. 预加载器与打字机进场
         const preloader = document.getElementById('preloader');
         const preloaderPercent = document.getElementById('preloader-percent');
         const preloaderBar = document.getElementById('preloader-bar');
+        const preloaderTip = document.getElementById('preloader-tip');
+        
+        // 趣味文案池
+        const tips = [
+            "文件正在赶路，堵车请稍等片刻...",
+            "人类是拥有无用知识越多越快乐的动物",
+            "发呆不是浪费时间，大脑此时反而活跃度最高",
+            "关灯后闭上眼睛，看到的光斑是视网膜残影"
+        ];
+        
+        if(preloaderTip) {
+            preloaderTip.innerText = tips[Math.floor(Math.random() * tips.length)];
+        }
         
         document.body.classList.add('loading');
 
         const fakeProgress = gsap.to({val: 0}, {
-            val: 90,
-            duration: 3,
-            ease: "power1.out",
+            val: 90, duration: 3, ease: "power1.out",
             onUpdate: function() {
                 const currentVal = Math.round(this.targets()[0].val);
                 preloaderPercent.innerText = currentVal + '%';
@@ -913,9 +980,7 @@
             const currentVal = parseInt(preloaderPercent.innerText);
             
             gsap.to({val: currentVal}, {
-                val: 100,
-                duration: 0.4,
-                ease: "power2.out",
+                val: 100, duration: 0.4, ease: "power2.out",
                 onUpdate: function() {
                     const finalVal = Math.round(this.targets()[0].val);
                     preloaderPercent.innerText = finalVal + '%';
@@ -923,10 +988,7 @@
                 },
                 onComplete: () => {
                     gsap.to(preloader, {
-                        yPercent: -100,
-                        duration: 1,
-                        ease: "expo.inOut",
-                        delay: 0.2, 
+                        yPercent: -100, duration: 1, ease: "expo.inOut", delay: 0.2, 
                         onComplete: () => {
                             preloader.style.display = 'none';
                             document.body.classList.remove('loading');
@@ -934,46 +996,27 @@
                             initLenis();
 
                             const heroTl = gsap.timeline();
-                            heroTl.to("#hero-small-text", {
-                                text: { value: "你好，我是", delimiter: "" },
-                                duration: 0.8, ease: "none", delay: 0.2
-                            })
-                            .to("#hero-large-text", {
-                                text: { value: "黄梓冠 Ziko", delimiter: "" },
-                                duration: 1.2, ease: "none"
-                            })
-                            .to(".desc-line", { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power3.out" }, "-=0.2")
-                            .to(".stat-item", { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" }, "-=0.4")
-                            .to(".counter", {
-                                innerHTML: function(index, target) { return target.getAttribute("data-target"); },
-                                duration: 1.5, snap: { innerHTML: 1 }, ease: "power2.out"
-                            }, "-=0.2");
+                            heroTl.to("#hero-small-text", { text: { value: "你好，我是", delimiter: "" }, duration: 0.8, ease: "none", delay: 0.2 })
+                                  .to("#hero-large-text", { text: { value: "黄梓冠 Ziko", delimiter: "" }, duration: 1.2, ease: "none" })
+                                  .to(".desc-line", { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power3.out" }, "-=0.2")
+                                  .to(".stat-item", { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" }, "-=0.4")
+                                  .to(".counter", { innerHTML: function(index, target) { return target.getAttribute("data-target"); }, duration: 1.5, snap: { innerHTML: 1 }, ease: "power2.out" }, "-=0.2");
                         }
                     });
                 }
             });
         });
 
-        // ==========================================================================
-        // Lenis 惯性滚动
-        // ==========================================================================
+        // 2. 惯性滚动
         let lenis;
         function initLenis() {
-            lenis = new Lenis({
-                duration: 2.5, 
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-                smoothWheel: true,
-                wheelMultiplier: 1.2, 
-            });
-
+            lenis = new Lenis({ duration: 2.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, wheelMultiplier: 1.2 });
             lenis.on('scroll', ScrollTrigger.update);
             gsap.ticker.add((time) => { lenis.raf(time * 1000); });
             gsap.ticker.lagSmoothing(0);
         }
 
-        // ==========================================================================
-        // 技能页面与矩阵悬停
-        // ==========================================================================
+        // 3. 技能列表悬停与视频切换
         const skillRows = document.querySelectorAll('.skill-row');
         const skillVideos = document.querySelectorAll('.skill-video');
         const videoContainer = document.getElementById('video-container');
@@ -982,9 +1025,7 @@
         function safePlayVideo(videoElement) {
             if (!videoElement) return;
             const playPromise = videoElement.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => console.warn("视频播放失败:", error));
-            }
+            if (playPromise !== undefined) playPromise.catch(error => console.warn("视频播放失败:", error));
         }
 
         skillRows.forEach((row) => {
@@ -1017,24 +1058,16 @@
 
         gsap.from(".review-wrapper", { scrollTrigger: { trigger: ".section-reviews", start: "top 70%", toggleActions: "play none none none" }, x: "100vw", rotation: 20, opacity: 0, duration: 1.2, stagger: 0.15, ease: "back.out(1.2)" });
 
-        // ==========================================================================
-        // 🚀 核心重构：彻底脱离背景的 3D Z轴悬浮 与 对角线漂移
-        // ==========================================================================
+        // 4. 照片瀑布流 3D 悬浮
         const scatterImages = gsap.utils.toArray('.scatter-img-wrapper');
-        
         scatterImages.forEach((wrapper) => {
             const speedY = parseFloat(wrapper.getAttribute('data-speed-y')) || 1;
             const speedX = parseFloat(wrapper.getAttribute('data-speed-x')) || 0;
-            
             const zOffset = speedY * 180;
             const scaleBase = 0.7 + (speedY * 0.1); 
             const zIndexBase = Math.round(speedY * 10);
             
-            gsap.set(wrapper, { 
-                z: zOffset,
-                scale: scaleBase,
-                zIndex: zIndexBase
-            });
+            gsap.set(wrapper, { z: zOffset, scale: scaleBase, zIndex: zIndexBase });
 
             const inner = wrapper.querySelector('.scatter-inner');
             if(inner) {
@@ -1042,80 +1075,57 @@
                 const shadowBlur = speedY * 40;
                 const shadowSpread = (speedY * 5) - 5; 
                 const shadowOpacity = Math.max(0.08, 0.25 - (speedY * 0.05)); 
-                
-                inner.style.boxShadow = `
-                    0 ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0,0,0,${shadowOpacity}),
-                    0 ${shadowY * 0.3}px ${shadowBlur * 0.3}px 0 rgba(0,0,0,${shadowOpacity + 0.05})
-                `;
+                inner.style.boxShadow = `0 ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0,0,0,${shadowOpacity}), 0 ${shadowY * 0.3}px ${shadowBlur * 0.3}px 0 rgba(0,0,0,${shadowOpacity + 0.05})`;
             }
 
             const yMove = -window.innerHeight * speedY * 6; 
             const xMove = (speedX * 2) + "vw"; 
 
             gsap.to(wrapper, {
-                y: yMove,
-                x: xMove, 
-                force3D: true, 
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#scatter-parallax-section",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 1.5
-                }
+                y: yMove, x: xMove, force3D: true, ease: "none",
+                scrollTrigger: { trigger: "#scatter-parallax-section", start: "top bottom", end: "bottom top", scrub: 1.5 }
             });
         });
 
-        // ==========================================================================
-        // 巨型底字反向蠕动 (Sticky Deep Background)
-        // ==========================================================================
+        // 5. 巨型底字与 S 型跟随线条动画
         const bgChars = gsap.utils.toArray('.scatter-char');
-        
         bgChars.forEach((char) => {
-            gsap.to(char, {
-                y: window.innerHeight * 1.5,
-                force3D: true,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#scatter-parallax-section",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 2 
-                }
+            gsap.to(char, { y: window.innerHeight * 1.5, force3D: true, ease: "none", scrollTrigger: { trigger: "#scatter-parallax-section", start: "top bottom", end: "bottom top", scrub: 2 } });
+        });
+
+        const magicLine = document.getElementById("magic-line");
+        if(magicLine) {
+            const lineLength = magicLine.getTotalLength();
+            gsap.set(magicLine, { strokeDasharray: lineLength, strokeDashoffset: lineLength });
+
+            gsap.to(magicLine, {
+                strokeDashoffset: 0, ease: "none",
+                scrollTrigger: { trigger: "#scatter-parallax-section", start: "top top", end: "bottom bottom", scrub: true }
             });
-        });
 
-        // ==========================================================================
-        // 卡片堆叠与打字机进场
-        // ==========================================================================
+            ScrollTrigger.create({
+                trigger: "#scatter-parallax-section", start: "top top", end: "bottom bottom",
+                toggleClass: {targets: "#scatter-scroll-wrapper", className: "active"}
+            });
+        }
+
+        // 6. 三维卡片堆叠动效
         const stackCards = gsap.utils.toArray('.stack-card');
-        
         const allDescs = document.querySelectorAll('.card-desc, .dual-desc');
-        allDescs.forEach(desc => {
-            desc.setAttribute('data-text', desc.innerText);
-            desc.innerText = ''; 
-        });
+        allDescs.forEach(desc => { desc.setAttribute('data-text', desc.innerText); desc.innerText = ''; });
 
-        gsap.set(stackCards, { 
-            zIndex: (i) => stackCards.length - i, 
-            y: (i) => i === 0 ? "0vh" : "15vh",
-            scale: (i) => i === 0 ? 1 : 0.85,
-            rotationX: 0 
-        });
+        gsap.set(stackCards, { zIndex: (i) => stackCards.length - i, y: (i) => i === 0 ? "0vh" : "15vh", scale: (i) => i === 0 ? 1 : 0.85, rotationX: 0 });
         
-        const stackTl = gsap.timeline({ scrollTrigger: { trigger: "#stack-section", start: "top top", end: () => `+=${stackCards.length * 60}%`, pin: true, scrub: 1 } });
+        const stackTl = gsap.timeline({ scrollTrigger: { trigger: "#stacking-container", start: "top top", end: () => `+=${stackCards.length * 60}%`, pin: true, scrub: 1 } });
 
         const firstCard = stackCards[0];
-        firstCard.querySelectorAll('.card-desc, .dual-desc').forEach(desc => {
-            gsap.to(desc, { scrollTrigger: { trigger: "#stack-section", start: "top 75%" }, text: desc.getAttribute('data-text'), duration: 1.5, ease: "none", delay: 0.2 });
-        });
-        gsap.from(firstCard.querySelectorAll('.tag-item'), { scrollTrigger: { trigger: "#stack-section", start: "top 75%" }, scale: 0.8, y: 20, opacity: 0, stagger: 0.05, duration: 0.6, ease: "back.out(1.5)", delay: 0.3 });
-        gsap.from(firstCard.querySelectorAll('.card-visual'), { scrollTrigger: { trigger: "#stack-section", start: "top 75%" }, x: 50, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.4 }); 
+        firstCard.querySelectorAll('.card-desc, .dual-desc').forEach(desc => { gsap.to(desc, { scrollTrigger: { trigger: "#stacking-container", start: "top 75%" }, text: desc.getAttribute('data-text'), duration: 1.5, ease: "none", delay: 0.2 }); });
+        gsap.from(firstCard.querySelectorAll('.tag-item'), { scrollTrigger: { trigger: "#stacking-container", start: "top 75%" }, scale: 0.8, y: 20, opacity: 0, stagger: 0.05, duration: 0.6, ease: "back.out(1.5)", delay: 0.3 });
+        gsap.from(firstCard.querySelectorAll('.card-visual'), { scrollTrigger: { trigger: "#stacking-container", start: "top 75%" }, x: 50, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.4 }); 
 
         stackCards.forEach((card, index) => {
             if (index === stackCards.length - 1) return;
             const nextCard = stackCards[index + 1];
-            
             const nextDescs = nextCard.querySelectorAll('.card-desc, .dual-desc');
             const nextTags = nextCard.querySelectorAll('.tag-item');
             const nextVisuals = nextCard.querySelectorAll('.card-visual, .dual-visual');
@@ -1123,20 +1133,12 @@
             stackTl.to(card, { y: "-150vh", rotationX: 40, scale: 0.85, rotationZ: index % 2 === 0 ? -2 : 2, ease: "power2.in" }, index)
                    .to(nextCard, { y: "0vh", scale: 1, ease: "none" }, index);
             
-            nextDescs.forEach(desc => {
-                stackTl.to(desc, { text: desc.getAttribute('data-text'), ease: "none" }, index + 0.1);
-            });
-            if(nextTags.length > 0) {
-                stackTl.from(nextTags, { scale: 0, opacity: 0, stagger: 0.05, ease: "back.out(1.5)" }, index + 0.3);
-            }
-            if(nextVisuals.length > 0) {
-                stackTl.from(nextVisuals, { y: 40, opacity: 0, ease: "power2.out" }, index + 0.4);
-            }
+            nextDescs.forEach(desc => { stackTl.to(desc, { text: desc.getAttribute('data-text'), ease: "none" }, index + 0.1); });
+            if(nextTags.length > 0) stackTl.from(nextTags, { scale: 0, opacity: 0, stagger: 0.05, ease: "back.out(1.5)" }, index + 0.3);
+            if(nextVisuals.length > 0) stackTl.from(nextVisuals, { y: 40, opacity: 0, ease: "power2.out" }, index + 0.4);
         });
 
-        // ==========================================================================
-        // 点击封面触发全屏弹窗播放器 (Video Modal) 交互逻辑
-        // ==========================================================================
+        // 7. B站视频弹窗交互
         const videoModal = document.getElementById('video-modal');
         const videoContent = document.getElementById('video-content');
         const videoClose = document.getElementById('video-close');
@@ -1158,48 +1160,96 @@
         }
 
         videoClose.addEventListener('click', closeVideoModal);
-        videoModal.addEventListener('click', (e) => {
-            if (e.target === videoModal) closeVideoModal();
-        });
+        videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeVideoModal(); });
 
-        // ==========================================================================
-        // 尾页握手与一键复制
-        // ==========================================================================
+        // 8. 尾页握手与一键复制 & Emoji 特效
         gsap.set(".hand-left", { x: "-50vw" });
         gsap.set(".hand-right", { x: "50vw" });
         gsap.set(".contact-content", { y: 50, opacity: 0 });
         const contactTl = gsap.timeline({ scrollTrigger: { trigger: "#contact-section", start: "top 80%", end: "center center", scrub: 1.5 } });
-        contactTl.to(".hand-left", { x: 80, ease: "none" }, 0)
-                 .to(".hand-right", { x: -80, ease: "none" }, 0)
-                 .to(".contact-content", { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0.2);
+        contactTl.to(".hand-left", { x: 80, ease: "none" }, 0).to(".hand-right", { x: -80, ease: "none" }, 0).to(".contact-content", { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0.2);
 
         const copyBtns = document.querySelectorAll('.contact-btn');
+        const emojiList = ["🎉", "✨", "😄", "🔥", "💥", "⭐", "💖", "🤩", "👍", "🥳", "🎊", "😎"];
+
         copyBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+                // 1. 复制文本
                 const textToCopy = this.getAttribute('data-copy');
                 const span = this.querySelector('span');
                 const originalText = span.innerText;
-
                 const tempTextArea = document.createElement('textarea');
                 tempTextArea.value = textToCopy;
                 document.body.appendChild(tempTextArea);
                 tempTextArea.select();
-                
                 try {
                     document.execCommand('copy');
                     this.classList.add('copied');
                     span.innerText = '已复制！';
-                    setTimeout(() => {
-                        this.classList.remove('copied');
-                        span.innerText = originalText;
-                    }, 2000);
-                } catch (err) {
-                    console.error('复制失败', err);
-                    span.innerText = '复制失败，请手动选择';
-                }
+                    setTimeout(() => { this.classList.remove('copied'); span.innerText = originalText; }, 2000);
+                } catch (err) { console.error('复制失败', err); span.innerText = '复制失败，请手动选择'; }
                 document.body.removeChild(tempTextArea);
+
+                // 2. 触发 Emoji 爆炸粒子特效
+                const rect = this.getBoundingClientRect();
+                const originX = rect.left + rect.width / 2;
+                const originY = rect.top + rect.height / 2;
+                
+                // 给按钮一个轻微震动
+                gsap.fromTo(this, 
+                    { x: -5, rotation: -2 }, 
+                    { x: 0, rotation: 0, duration: 0.3, ease: "elastic.out(1, 0.3)" }
+                );
+
+                const particleCount = 16;
+                for(let i = 0; i < particleCount; i++) {
+                    createEmojiParticle(originX, originY);
+                }
             });
         });
+
+        // 独立 Emoji 生成器
+        function createEmojiParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.innerText = emojiList[Math.floor(Math.random() * emojiList.length)];
+            particle.style.position = 'fixed';
+            particle.style.left = '0';
+            particle.style.top = '0';
+            particle.style.fontSize = '24px';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            particle.style.userSelect = 'none';
+            document.body.appendChild(particle);
+
+            const angle = (-90 + (Math.random() * 2 - 1) * 55) * Math.PI / 180;
+            const speed = 12 * (0.65 + Math.random() * 0.8);
+            
+            let pX = x - 12;
+            let pY = y - 12;
+            let vX = Math.cos(angle) * speed;
+            let vY = Math.sin(angle) * speed;
+            let rot = Math.random() * 360;
+            let vRot = (Math.random() * 2 - 1) * 14;
+            const gravity = 0.6;
+            let life = 1;
+
+            function step() {
+                vY += gravity;
+                pX += vX;
+                pY += vY;
+                rot += vRot;
+                life -= 0.015;
+
+                if(life > 0 && pY < window.innerHeight + 50) {
+                    particle.style.transform = `translate3d(${pX}px, ${pY}px, 0) rotate(${rot}deg)`;
+                    particle.style.opacity = life;
+                    requestAnimationFrame(step);
+                } else {
+                    particle.remove();
+                }
+            }
+            requestAnimationFrame(step);
+        }
 
     </script>
 </body>
